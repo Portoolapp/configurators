@@ -4,7 +4,7 @@
   padding: 0;
 }
 .debug {
-  display: none;
+  display: none !important;
 }
 body {
   font-family: "Roboto", sans-serif;
