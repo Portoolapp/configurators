@@ -7,14 +7,17 @@ const version = "1.12.1";
 let base = {};
 let _nodes;
 let baseSash = [];
-let baseHandles = [];
+let baseLock1 = [];
+let baseLock2 = [];
+let baseLocks = {};
+let locksId = [3, 31];
 // Initialize Sketchfab client and load the model
 const client = new Sketchfab(version, iframe);
 let interiorColor = "white";
 let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
-const sliderItemId = 605;
+const sliderItemId = 658;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -237,8 +240,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [147, 659],
-  traditional: [300, 812],
+  prairie: [200, 712],
+  traditional: [353, 865],
 };
 const handleID = 412;
 
@@ -354,9 +357,9 @@ function getSliderWorldCoordinates(api) {
       const z = matrix.world[14]; // Z coordinate
 
       // Store them in the baseSash array
-      baseHandles = [x, y, z];
+      baseLock1 = [x, y, z];
 
-      console.log("Handle World Coordinates: ", baseHandles);
+      console.log("Handle World Coordinates: ", baseLock1);
     } else {
       console.error("Error getting matrix for instance ID Handles:", err);
     }
@@ -421,9 +424,9 @@ function sliderHandler(event) {
   // Assuming base[nodeInstanceID] stores the initial position for translation
   const newPosition = [baseSash[0], baseSash[1] + value, baseSash[2] + zOffset];
   // const newHandlePosition = [
-  //   baseHandles[0] + value,
-  //   baseHandles[1],
-  //   baseHandles[2],
+  //   baseLock1[0] + value,
+  //   baseLock1[1],
+  //   baseLock1[2],
   // ];
   api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
     if (!err) {
