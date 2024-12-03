@@ -457,6 +457,8 @@ function initialInteriorAndExterior() {
 
   // Simulate a click event on the button
   button.click();
+
+  setColor("Exterior", interiorColors["black"]);
 }
 
 function interiorColorSelectHandler(event) {
