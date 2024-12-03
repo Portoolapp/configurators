@@ -1,11 +1,12 @@
 // Initialize Sketchfab Viewer
 const iframe = document.getElementById("api-frame");
-const uid = "1db33543f4b54ca995c7babeb3949ba2"; // Replace with your model's UID
+// const uid = "1db33543f4b54ca995c7babeb3949ba2"; // Replace with your model's UID
+const uid = "d294701c13144ec09ceb521a4745edde"; // Replace with your model's UID
 let api;
 const version = "1.12.1";
 let base = {};
 let _nodes;
-let baseDoor = [];
+let baseSash = [];
 let baseHandles = [];
 // Initialize Sketchfab client and load the model
 const client = new Sketchfab(version, iframe);
@@ -13,6 +14,7 @@ let interiorColor = "white";
 let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
+const sliderItemId = 605;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -181,13 +183,21 @@ document
   .addEventListener("click", () => navigateTo("page1")); // Going right from page4 to page1
 const interiorColors = {
   white: "#f3f4f5",
-  // black: "#16151c",
-  // black: "#0d0d0d",
   black: "#000000",
-  brown: "#514431",
-  tan: "#c8baa5",
-  // "morning-sky-gray": "#cecfd0",
-  "morning-sky-gray": "#a2a0a0",
+  beige: "#f5f5dc", // Added Beige
+  bronze: "#4d4b47", // Added Bronze
+};
+const exteriorColors = {
+  white: "#f3f4f5",
+  black: "#16151c",
+  beige: "#f5f5dc",
+  bronze: "#4d4b47",
+};
+const colorCombinations = {
+  white: ["black", "bronze", "white"], // White interior can have Black or Bronze exterior
+  black: ["black"], // Black interior can only have Black exterior
+  bronze: ["bronze"], // Bronze interior can only have Bronze exterior
+  beige: ["beige"], // Beige interior can only have Beige exterior
 };
 
 function hexToRgbArray(hex) {
@@ -227,8 +237,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [185, 697],
-  traditional: [338, 850],
+  prairie: [147, 659],
+  traditional: [300, 812],
 };
 const handleID = 412;
 
@@ -311,12 +321,12 @@ function onModelLoaded(api) {
       }
     );
   }
-
+  setTimeout(initialInteriorAndExterior, 2000);
   initializeMaterialEditor();
 }
 
 function getSliderWorldCoordinates(api) {
-  const nodeInstanceID = 217; // The instance ID for the primary slider
+  const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
 
   // Get the world matrix of the node
   api.getMatrix(nodeInstanceID, function (err, matrix) {
@@ -326,10 +336,10 @@ function getSliderWorldCoordinates(api) {
       const y = matrix.world[13]; // Y coordinate
       const z = matrix.world[14]; // Z coordinate
 
-      // Store them in the baseDoor array
-      baseDoor = [x, y, z];
+      // Store them in the baseSash array
+      baseSash = [x, y, z];
 
-      console.log("Slider World Coordinates: ", baseDoor);
+      console.log("Slider World Coordinates: ", baseSash);
     } else {
       console.error("Error getting matrix for instance ID 217:", err);
     }
@@ -343,7 +353,7 @@ function getSliderWorldCoordinates(api) {
       const y = matrix.world[13]; // Y coordinate
       const z = matrix.world[14]; // Z coordinate
 
-      // Store them in the baseDoor array
+      // Store them in the baseSash array
       baseHandles = [x, y, z];
 
       console.log("Handle World Coordinates: ", baseHandles);
@@ -401,14 +411,15 @@ function sliderHandler(event) {
   const element = event.target;
   const value = parseFloat(element.value);
 
-  const zOffset = -0.03;
+  // const zOffset = -0.03;
+  const zOffset = -0;
   // Directly use the instance ID for the primary slider node
-  const nodeInstanceID = 217; // The instance ID for the primary slider
+  const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
 
   console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
 
   // Assuming base[nodeInstanceID] stores the initial position for translation
-  const newPosition = [baseDoor[0] + value, baseDoor[1], baseDoor[2] + zOffset];
+  const newPosition = [baseSash[0], baseSash[1] + value, baseSash[2] + zOffset];
   // const newHandlePosition = [
   //   baseHandles[0] + value,
   //   baseHandles[1],
@@ -439,6 +450,14 @@ document
 document.querySelectorAll(".interior-color").forEach((element) => {
   element.addEventListener("click", interiorColorSelectHandler);
 });
+function initialInteriorAndExterior() {
+  console.log("Initial white interior button press");
+  // Select the button with the class "interior-color" and data-color="white"
+  const button = document.querySelector('.interior-color[data-color="white"]');
+
+  // Simulate a click event on the button
+  button.click();
+}
 
 function interiorColorSelectHandler(event) {
   focusInterior();
@@ -456,15 +475,17 @@ function interiorColorSelectHandler(event) {
   // Add the 'selected' class to the clicked color button
   event.target.classList.add("selected");
   setColor("Interior", interiorColors[interiorColor]);
-  if (interiorColor === "white") {
-    // showAllExteriorColors();
-    console.log("No need to disable any Exterior colors");
-    updateExteriorColorOptions(interiorColor);
-  } else {
-    // Otherwise, show only the exterior colors that match the interior color
-    updateExteriorColorOptions(interiorColor);
-    setColor("Exterior", interiorColors[interiorColor]);
-  }
+  // if (interiorColor === "white") {
+  //   // showAllExteriorColors();
+  //   console.log("No need to disable any Exterior colors");
+  //   updateExteriorColorOptions(interiorColor);
+  // } else {
+  //   // Otherwise, show only the exterior colors that match the interior color
+  //   updateExteriorColorOptions(interiorColor);
+  //   setColor("Exterior", interiorColors[interiorColor]);
+  // }
+  // TODO : update selections
+  updateExteriorColorOptionsv2(interiorColor);
 }
 
 function showAllExteriorColors() {
@@ -477,26 +498,6 @@ function showAllExteriorColors() {
 document.querySelectorAll(".exterior-color").forEach((element) => {
   element.addEventListener("click", exteriorColorSelectHandler);
 });
-
-// function updateExteriorColorOptions(selectedInteriorColor) {
-//   const exteriorColorCircles = document.querySelectorAll(".exterior-color");
-
-//   exteriorColorCircles.forEach((circle) => {
-//     const exteriorColor = circle.getAttribute("data-color");
-
-//     // If the interior color is not white, match the exterior colors to the selected interior color
-//     if (selectedInteriorColor === exteriorColor) {
-//       console.log(
-//         `for interior : ${selectedInteriorColor} and exterior: ${exteriorColor} decision is same`
-//       );
-//       // Show the matching exterior color
-//       circle.style.display = "inline-block";
-//     } else {
-//       // Hide the non-matching exterior colors
-//       circle.style.display = "none";
-//     }
-//   });
-// }
 
 function updateExteriorColorOptions(selectedInteriorColor) {
   document.querySelectorAll(".exterior-color").forEach((button) => {
@@ -554,27 +555,61 @@ function updateExteriorColorOptions(selectedInteriorColor) {
       }
     });
   }
-  // exteriorColorCircles.forEach((circle) => {
-  //   const exteriorColor = circle.getAttribute("data-color");
+}
 
-  //   if (
-  //     selectedInteriorColor == "white" ||
-  //     selectedInteriorColor === exteriorColor
-  //   ) {
-  //     console.log(
-  //       `For interior: ${selectedInteriorColor} and exterior: ${exteriorColor}, the decision is the same`
-  //     );
-  //     // Enable the matching exterior color
-  //     circle.style.opacity = "1";
-  //     circle.style.pointerEvents = "auto";
-  //     circle.style.filter = "none"; // Reset any disabled styles
-  //   } else {
-  //     // Disable the non-matching exterior colors
-  //     circle.style.opacity = "0.5"; // Visual indication of being disabled
-  //     circle.style.pointerEvents = "none"; // Makes it unclickable
-  //     circle.style.filter = "grayscale(100%)"; // Optional visual cue
-  //   }
-  // });
+function updateExteriorColorOptionsv2(selectedInteriorColor) {
+  console.log(`Selected Interior Color: ${selectedInteriorColor}`);
+
+  // Remove any 'blocked-overlay' class from all exterior color buttons
+  document.querySelectorAll(".exterior-color").forEach((button) => {
+    button.classList.remove("blocked-overlay");
+  });
+
+  document.querySelectorAll(".exterior-color").forEach((button) => {
+    button.classList.remove("selected");
+  });
+
+  const exteriorColorCircles = document.querySelectorAll(".exterior-color");
+
+  // Check for matching exterior color options based on the selected interior color
+  if (colorCombinations[selectedInteriorColor]) {
+    console.log(
+      `Available exterior colors for "${selectedInteriorColor}": ${colorCombinations[selectedInteriorColor]}`
+    );
+
+    // Flag to check if we've auto-selected the first exterior option
+    let autoSelected = false;
+
+    exteriorColorCircles.forEach((circle) => {
+      const exteriorColor = circle.getAttribute("data-color");
+
+      // Check if the exterior color is valid for the selected interior color
+      if (colorCombinations[selectedInteriorColor].includes(exteriorColor)) {
+        console.log(`Enabling exterior color: ${exteriorColor}`);
+
+        // If we haven't auto-selected yet, select the first valid color automatically
+        if (!autoSelected) {
+          circle.classList.add("selected");
+          console.log(`Auto-selected exterior color: ${exteriorColor}`);
+          autoSelected = true; // Set flag so we don't auto-select again
+        } else {
+          // Dont block the other permissible colors
+          console.log(
+            `The color ${exteriorColor} is not selected but also not blocked`
+          );
+        }
+      } else {
+        // Disable non-matching exterior color options
+        console.log(`Disabling exterior color: ${exteriorColor}`);
+        circle.classList.add("blocked-overlay");
+        console.log(`Blocking exterior color: ${exteriorColor}`);
+      }
+    });
+  } else {
+    console.log(
+      `No valid exterior options for interior color: ${selectedInteriorColor}`
+    );
+  }
 }
 
 function exteriorColorSelectHandler(event) {
