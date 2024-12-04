@@ -45,43 +45,31 @@ const cameraSettings = {
   },
   tablet: {
     interior: {
-      position: [-0.0829449667684216, -3.415985557474823, 2.1353485887279002],
-      target: [-0.04800606233096107, 0.07071336647401145, 1.481323605916866],
+      position: [-0.016643662571877653, -6.290915156447426, 2.24558627097869],
+      target: [0.04923228672445302, 0.11281766382198746, 1.710982125988278],
     },
     exterior: {
-      position: [0.12864199858577252, 3.5870068756519884, 1.9202608403907497],
-      target: [-0.0020004517048344767, 0.06974442713534036, 1.4754730146952073],
+      position: [0.29440318252960795, 6.534208718305296, 1.6512877109721358],
+      target: [0.04923228672445302, 0.11281766382198746, 1.710982125988278],
     },
     intermediate: {
-      position: [
-        -3.4875587614373385, -0.0038863718326686003, 2.3473206616652287,
-      ],
-      target: [-0.04800606233096107, 0.07071336647401145, 1.481323605916866],
+      position: [-6.307247906536387, 0.008967737263254491, 2.6502957112028445],
+      target: [0.04923228672445302, 0.11281766382198746, 1.710982125988278],
     },
   },
 
   phone: {
     interior: {
-      position: [
-        0.00003166594508288762, -2.744865502247972, 1.8101091730079548,
-      ],
-      target: [
-        0.00003166594505310538, 0.017710406076908443, 1.5019633000373842,
-      ],
+      position: [0.005557163028385189, -3.654313353010164, 2.205952216412704],
+      target: [0.004207514783489496, 0.05013429816957483, 1.7923437200998993],
     },
     intermediate: {
-      position: [
-        -2.7553471474138616, -0.061617270292070724, 1.8602568151064554,
-      ],
-      target: [
-        0.00003166594505310538, 0.017710406076908443, 1.5019633000373842,
-      ],
+      position: [-3.6827763239497204, 0.023868010462204492, 2.3395790124137283],
+      target: [0.004207514783489496, 0.05013429816957483, 1.7923437200998993],
     },
     exterior: {
-      position: [-0.060822913380589906, 2.791367555609036, 1.674886014884943],
-      target: [
-        0.00003166594505310538, 0.017710406076908443, 1.5019633000373842,
-      ],
+      position: [0.030351733911707805, 3.7656378338581664, 2.089591371386416],
+      target: [0.004207514783489496, 0.05013429816957483, 1.7923437200998993],
     },
   },
 };
@@ -593,7 +581,9 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
 
     exteriorColorCircles.forEach((circle) => {
       const exteriorColor = circle.getAttribute("data-color");
-
+      console.log(
+        `Inside Updateexteriorcoloroptionsv2 , exterior Color = ${exteriorColor}`
+      );
       // Check if the exterior color is valid for the selected interior color
       if (colorCombinations[selectedInteriorColor].includes(exteriorColor)) {
         console.log(`Enabling exterior color: ${exteriorColor}`);
@@ -601,6 +591,7 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
         // If we haven't auto-selected yet, select the first valid color automatically
         if (!autoSelected) {
           circle.classList.add("selected");
+          setColor("Exterior", interiorColors[exteriorColor]);
           console.log(`Auto-selected exterior color: ${exteriorColor}`);
           autoSelected = true; // Set flag so we don't auto-select again
         } else {
