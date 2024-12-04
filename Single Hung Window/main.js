@@ -10,14 +10,14 @@ let baseSash = [];
 let baseLock1 = [];
 let baseLock2 = [];
 let baseLocks = {};
-let locksId = [3, 31];
+let locksId = [];
 // Initialize Sketchfab client and load the model
 const client = new Sketchfab(version, iframe);
 let interiorColor = "white";
 let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
-const sliderItemId = 658;
+const sliderItemId = 391;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -234,8 +234,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [200, 712],
-  traditional: [353, 865],
+  prairie: [120, 534],
+  traditional: [276, 687],
 };
 const handleID = 412;
 
@@ -428,25 +428,27 @@ function sliderHandler(event) {
   });
 
   // Translate the secondary objects
-  locksId.forEach((id) => {
-    if (baseLocks[id]) {
-      const newLockPosition = [
-        baseLocks[id][0], // X remains the same
-        baseLocks[id][1] + value, // Update Y by adding the slider value
-        baseLocks[id][2], // Z remains the same
-      ];
+  if (locksId) {
+    locksId.forEach((id) => {
+      if (baseLocks[id]) {
+        const newLockPosition = [
+          baseLocks[id][0], // X remains the same
+          baseLocks[id][1] + value, // Update Y by adding the slider value
+          baseLocks[id][2], // Z remains the same
+        ];
 
-      api.translate(id, newLockPosition, {}, function (err, translateTo) {
-        if (!err) {
-          console.log(`Lock ${id} has been translated to`, translateTo);
-        } else {
-          console.error(`Translation for lock ${id} failed:`, err);
-        }
-      });
-    } else {
-      console.warn(`Base position for lock ${id} not found.`);
-    }
-  });
+        api.translate(id, newLockPosition, {}, function (err, translateTo) {
+          if (!err) {
+            console.log(`Lock ${id} has been translated to`, translateTo);
+          } else {
+            console.error(`Translation for lock ${id} failed:`, err);
+          }
+        });
+      } else {
+        console.warn(`Base position for lock ${id} not found.`);
+      }
+    });
+  }
 }
 
 // Handle the primary slider (door slider)
