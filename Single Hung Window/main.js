@@ -31,22 +31,16 @@ VM3712:3 (3) [0.00003166594505310538, 0.017710406076908443, 1.5019633000373842]
 const cameraSettings = {
   laptop: {
     interior: {
-      position: [0.05293366677413374, -2.7364976704769184, 1.8738758927568697],
-      target: [
-        0.00003166594505310538, 0.017710406076908443, 1.5019633000373842,
-      ],
+      position: [0.09357764675248224, -3.643557384349503, 2.358016537820132],
+      target: [0.022323808650106802, 0.066092407934768, 1.857086530361864],
     },
     intermediate: {
-      position: [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687],
-      target: [
-        0.00003166594505310538, 0.017710406076908443, 1.5019633000373842,
-      ],
+      position: [-3.6228270365101554, 0.05496776126339985, 2.711639701016007],
+      target: [0.022323808650106802, 0.066092407934768, 1.857086530361864],
     },
     exterior: {
-      position: [0.00984113250497559, 2.79028723950023, 1.7007123991535738],
-      target: [
-        0.00003166594505310538, 0.017710406076908443, 1.5019633000373842,
-      ],
+      position: [0.0026169509839945315, 3.786782532966144, 2.2737232983818267],
+      target: [0.022323808650106802, 0.066092407934768, 1.857086530361864],
     },
   },
   tablet: {
@@ -187,14 +181,14 @@ document
 const interiorColors = {
   white: "#f3f4f5",
   black: "#000000",
-  beige: "#f5f5dc", // Added Beige
-  bronze: "#4d4b47", // Added Bronze
+  beige: "#b59d73", // Added Beige
+  bronze: "#65593e", // Added Bronze
 };
 const exteriorColors = {
   white: "#f3f4f5",
   black: "#16151c",
-  beige: "#f5f5dc",
-  bronze: "#4d4b47",
+  beige: "#b59d73", // Added Beige
+  bronze: "#65593e",
 };
 const colorCombinations = {
   white: ["black", "bronze", "white"], // White interior can have Black or Bronze exterior
@@ -349,20 +343,22 @@ function getSliderWorldCoordinates(api) {
   });
 
   // also get the handles base values
-  api.getMatrix(handleID, function (err, matrix) {
-    if (!err) {
-      // Extract the X, Y, Z coordinates from the world matrix
-      const x = matrix.world[12]; // X coordinate
-      const y = matrix.world[13]; // Y coordinate
-      const z = matrix.world[14]; // Z coordinate
+  locksId.forEach((id) => {
+    api.getMatrix(id, function (err, matrix) {
+      if (!err) {
+        // Extract the X, Y, Z coordinates from the world matrix
+        const x = matrix.world[12]; // X coordinate
+        const y = matrix.world[13]; // Y coordinate
+        const z = matrix.world[14]; // Z coordinate
 
-      // Store them in the baseSash array
-      baseLock1 = [x, y, z];
+        // Store them in the baseLocks object with the ID as the key
+        baseLocks[id] = [x, y, z];
 
-      console.log("Handle World Coordinates: ", baseLock1);
-    } else {
-      console.error("Error getting matrix for instance ID Handles:", err);
-    }
+        console.log(`Lock World Coordinates for ID ${id}:`, baseLocks[id]);
+      } else {
+        console.error(`Error getting matrix for instance ID ${id}:`, err);
+      }
+    });
   });
 }
 
@@ -421,13 +417,8 @@ function sliderHandler(event) {
 
   console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
 
-  // Assuming base[nodeInstanceID] stores the initial position for translation
+  // Translate the primary slider
   const newPosition = [baseSash[0], baseSash[1] + value, baseSash[2] + zOffset];
-  // const newHandlePosition = [
-  //   baseLock1[0] + value,
-  //   baseLock1[1],
-  //   baseLock1[2],
-  // ];
   api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
     if (!err) {
       console.log("Object has been translated to", translateTo);
@@ -436,13 +427,26 @@ function sliderHandler(event) {
     }
   });
 
-  // api.translate(handleID, newHandlePosition, {}, function (err, translateTo) {
-  //   if (!err) {
-  //     console.log("Handle has been translated to", translateTo);
-  //   } else {
-  //     console.error("Translation failed:", err);
-  //   }
-  // });
+  // Translate the secondary objects
+  locksId.forEach((id) => {
+    if (baseLocks[id]) {
+      const newLockPosition = [
+        baseLocks[id][0], // X remains the same
+        baseLocks[id][1] + value, // Update Y by adding the slider value
+        baseLocks[id][2], // Z remains the same
+      ];
+
+      api.translate(id, newLockPosition, {}, function (err, translateTo) {
+        if (!err) {
+          console.log(`Lock ${id} has been translated to`, translateTo);
+        } else {
+          console.error(`Translation for lock ${id} failed:`, err);
+        }
+      });
+    } else {
+      console.warn(`Base position for lock ${id} not found.`);
+    }
+  });
 }
 
 // Handle the primary slider (door slider)
