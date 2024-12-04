@@ -17,7 +17,7 @@ let interiorColor = "white";
 let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
-const sliderItemId = 391;
+const sliderItemId = 304;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -169,14 +169,16 @@ document
 const interiorColors = {
   white: "#f3f4f5",
   black: "#000000",
-  beige: "#b59d73", // Added Beige
-  bronze: "#65593e", // Added Bronze
+  // beige: "#b59d73", // Added Beige
+  beige: "#816f51", // Added Beige
+  bronze: "#282725", // Added Bronze
 };
 const exteriorColors = {
   white: "#f3f4f5",
   black: "#16151c",
-  beige: "#b59d73", // Added Beige
-  bronze: "#65593e",
+  // beige: "#b59d73", // Added Beige
+  beige: "#816f51", // Added Beige
+  bronze: "#282725",
 };
 const colorCombinations = {
   white: ["black", "bronze", "white"], // White interior can have Black or Bronze exterior
@@ -222,8 +224,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [120, 534],
-  traditional: [276, 687],
+  prairie: [120, 447],
+  traditional: [225, 552],
 };
 const handleID = 412;
 
