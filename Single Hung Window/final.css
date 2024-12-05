@@ -358,6 +358,7 @@ h3 {
   flex-wrap: nowrap !important;
   overflow-x: auto;
   overflow-y: hidden;
+  justify-content: center;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -521,4 +522,22 @@ h3 {
   flex-wrap: wrap;
   /* remove the above line to make it look like before  */
   width: 100%;
+}
+
+.spacer {
+  height: 0px; /* Default height */
+}
+
+/* Spacer height for laptop-sized screens */
+@media (min-width: 1024px) {
+  .spacer {
+    height: 2vh; /* Larger height for laptops */
+  }
+}
+
+/* Optional: Spacer height for smaller devices */
+@media (max-width: 768px) {
+  .spacer {
+    height: 0px; /* Smaller height for mobile devices */
+  }
 }
