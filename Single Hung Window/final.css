@@ -35,6 +35,10 @@ h3 {
   font-weight: 500;
 }
 
+.grillheading {
+  margin-bottom: 0px;
+}
+
 .iframe-container {
   flex: 7;
   display: flex;
@@ -490,4 +494,31 @@ h3 {
   -webkit-overflow-scrolling: touch;
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.configurator.non-phone {
+  align-items: center !important;
+}
+.configurator.non-phone .centered-content {
+  display: flex;
+  flex-direction: column; /* Vertical stacking */
+  justify-content: center; /* Vertically centered */
+  align-items: stretch; /* Horizontally stretched */
+  gap: 10px; /* Add spacing between items */
+  height: 100%; /* Ensure full height of parent */
+}
+
+.configurator.non-phone .centered-content > div {
+  display: flex;
+  justify-content: space-between;
+  /* remove the above line to make it look like before  */
+  width: 100%; /* Ensure each section spans full width */
+}
+
+.configurator.non-phone .centered-content .grille-options {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  /* remove the above line to make it look like before  */
+  width: 100%;
 }
