@@ -1,12 +1,13 @@
 // Initialize Sketchfab Viewer
 const iframe = document.getElementById("api-frame");
 // const uid = "1db33543f4b54ca995c7babeb3949ba2"; // Replace with your model's UID
-const uid = "bd88d96a8df649e48293be41b9b0489d"; // Replace with your model's UID
+const uid = "da09ce142a354b5ea824df38698060a0"; // Replace with your model's UID
 let api;
 const version = "1.12.1";
 let base = {};
 let _nodes;
-let baseSash = [];
+let baseSash1 = [];
+let baseSash2 = [];
 let baseLock1 = [];
 let baseLock2 = [];
 let baseLocks = {};
@@ -18,6 +19,8 @@ let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
 const sliderItemId = 127;
+const slider1 = 37;
+const slider2 = 270;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -31,44 +34,51 @@ VM3712:3 (3) [0.00003166594505310538, 0.017710406076908443, 1.5019633000373842]
 const cameraSettings = {
   laptop: {
     interior: {
-      position: [0.9080488874565105, -3.366425992671914, 2.148017341436057],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [-0.11215700427743769, -5.587517613574884, 1.4828301211484645],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
     intermediate: {
-      position: [-2.4443003885814094, 0.08658094024337017, 2.351424320688789],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [
+        -5.4358099317157444, -0.010258761232090574, 2.2076127865086095,
+      ],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
     exterior: {
-      position: [1.003572766898403, 3.5336761869366797, 1.9778968765932783],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [0.024959374445176607, 5.430287163967652, 1.9361797977034605],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
   },
+
   tablet: {
     interior: {
-      position: [0.9080488874565018, -6.155680329175703, 3.054301013169183],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
-    },
-    exterior: {
-      position: [1.0896386906179043, 6.5840493025961395, 1.333295754767758],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [0.36539612054498494, -13.546582428143426, 2.3181670139770523],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
     intermediate: {
-      position: [-5.480077250921402, 0.11091615877318138, 2.4091204915233346],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [
+        -13.272175693174132, -0.0006974292419513611, 3.843740131897576,
+      ],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+    },
+    exterior: {
+      position: [0.7150481694029635, 13.459018105750326, 1.906883699592313],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
   },
   phone: {
     interior: {
-      position: [0.9080488874565105, -3.366425992671914, 2.148017341436057],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [-0.11215700427743769, -5.587517613574884, 1.4828301211484645],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
     intermediate: {
-      position: [-2.4443003885814094, 0.08658094024337017, 2.351424320688789],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [
+        -5.4358099317157444, -0.010258761232090574, 2.2076127865086095,
+      ],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
     exterior: {
-      position: [1.003572766898403, 3.5336761869366797, 1.9778968765932783],
-      target: [0.9080488874564873, 0.058943422061014494, 1.0350473517155412],
+      position: [0.024959374445176607, 5.430287163967652, 1.9361797977034605],
+      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
     },
   },
 };
@@ -223,8 +233,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [139, 360, 604, 817],
-  traditional: [238, 465, 709, 922],
+  prairie: [112, 339, 584, 797],
+  traditional: [217, 444, 689, 902],
 };
 const handleID = 412;
 
@@ -287,7 +297,7 @@ function onModelLoaded(api) {
   console.log("Model has been loaded");
   console.log(`Device is ${deviceType()}`);
   logAllParts(api);
-  getSliderWorldCoordinates(api);
+  getSlidersWorldCoordinates(api);
   hideAllGrills();
   // Show the default grill (Traditional, for instance)
   showGrillType("traditional");
@@ -311,43 +321,42 @@ function onModelLoaded(api) {
   initializeMaterialEditor();
 }
 
-function getSliderWorldCoordinates(api) {
-  const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
+function getSlidersWorldCoordinates(api) {
+  const nodeInstanceID1 = slider1; // The instance ID for the first slider
+  const nodeInstanceID2 = slider2; // The instance ID for the second slider
 
-  // Get the world matrix of the node
-  api.getMatrix(nodeInstanceID, function (err, matrix) {
+  // Get the world matrix of the first node (slider1)
+  api.getMatrix(nodeInstanceID1, function (err, matrix1) {
     if (!err) {
-      // Extract the X, Y, Z coordinates from the world matrix
-      const x = matrix.world[12]; // X coordinate
-      const y = matrix.world[13]; // Y coordinate
-      const z = matrix.world[14]; // Z coordinate
+      // Extract the X, Y, Z coordinates from the world matrix of slider1
+      const x1 = matrix1.world[12]; // X coordinate
+      const y1 = matrix1.world[13]; // Y coordinate
+      const z1 = matrix1.world[14]; // Z coordinate
 
       // Store them in the baseSash array
-      baseSash = [x, y, z];
+      baseSash1 = [x1, y1, z1];
 
-      console.log("Slider World Coordinates: ", baseSash);
+      console.log("Slider 1 World Coordinates: ", baseSash1);
     } else {
-      console.error("Error getting matrix for instance ID 217:", err);
+      console.error("Error getting matrix for slider1:", err);
     }
   });
 
-  // also get the handles base values
-  locksId.forEach((id) => {
-    api.getMatrix(id, function (err, matrix) {
-      if (!err) {
-        // Extract the X, Y, Z coordinates from the world matrix
-        const x = matrix.world[12]; // X coordinate
-        const y = matrix.world[13]; // Y coordinate
-        const z = matrix.world[14]; // Z coordinate
+  // Get the world matrix of the second node (slider2)
+  api.getMatrix(nodeInstanceID2, function (err, matrix2) {
+    if (!err) {
+      // Extract the X, Y, Z coordinates from the world matrix of slider2
+      const x2 = matrix2.world[12]; // X coordinate
+      const y2 = matrix2.world[13]; // Y coordinate
+      const z2 = matrix2.world[14]; // Z coordinate
 
-        // Store them in the baseLocks object with the ID as the key
-        baseLocks[id] = [x, y, z];
+      // Store them in the baseSash array
+      baseSash2 = [x2, y2, z2];
 
-        console.log(`Lock World Coordinates for ID ${id}:`, baseLocks[id]);
-      } else {
-        console.error(`Error getting matrix for instance ID ${id}:`, err);
-      }
-    });
+      console.log("Slider 2 World Coordinates: ", baseSash2);
+    } else {
+      console.error("Error getting matrix for slider2:", err);
+    }
   });
 }
 
@@ -399,45 +408,56 @@ function sliderHandler(event) {
   const element = event.target;
   const value = parseFloat(element.value);
 
-  // const zOffset = -0.03;
-  const zOffset = -0;
-  // Directly use the instance ID for the primary slider node
-  const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
+  const zOffset = +0.02; // Adjust the Z offset if needed
+  const yOffset = +0.08;
 
-  console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
+  // Instance IDs for both sliders
+  const nodeInstanceID1 = slider1; // The instance ID for slider1
+  const nodeInstanceID2 = slider2; // The instance ID for slider2
 
-  // Translate the primary slider
-  const newPosition = [baseSash[0] + value, baseSash[1], baseSash[2] + zOffset];
-  api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
-    if (!err) {
-      console.log("Object has been translated to", translateTo);
-    } else {
-      console.error("Translation failed:", err);
-    }
-  });
+  console.log(
+    `Slider value: ${value}, Node1: ${nodeInstanceID1}, Node2: ${nodeInstanceID2}`
+  );
 
-  // Translate the secondary objects
-  if (locksId) {
-    locksId.forEach((id) => {
-      if (baseLocks[id]) {
-        const newLockPosition = [
-          baseLocks[id][0], // X remains the same
-          baseLocks[id][1] + value, // Update Y by adding the slider value
-          baseLocks[id][2], // Z remains the same
-        ];
+  // Update the X coordinates for both sliders
+  const newPosition1 = [
+    baseSash1[0] + value,
+    baseSash1[1] + yOffset,
+    baseSash1[2] + zOffset,
+  ]; // Subtract from slider1's X
+  const newPosition2 = [
+    baseSash2[0] - value,
+    baseSash2[1] + yOffset,
+    baseSash2[2] + zOffset,
+  ]; // Add to slider2's X
 
-        api.translate(id, newLockPosition, {}, function (err, translateTo) {
-          if (!err) {
-            console.log(`Lock ${id} has been translated to`, translateTo);
-          } else {
-            console.error(`Translation for lock ${id} failed:`, err);
-          }
-        });
+  // Translate the first slider (slider1)
+  api.translate(
+    nodeInstanceID1,
+    newPosition1,
+    {},
+    function (err, translateTo1) {
+      if (!err) {
+        console.log("Slider 1 translated to", translateTo1);
       } else {
-        console.warn(`Base position for lock ${id} not found.`);
+        console.error("Translation failed for slider 1:", err);
       }
-    });
-  }
+    }
+  );
+
+  // Translate the second slider (slider2)
+  api.translate(
+    nodeInstanceID2,
+    newPosition2,
+    {},
+    function (err, translateTo2) {
+      if (!err) {
+        console.log("Slider 2 translated to", translateTo2);
+      } else {
+        console.error("Translation failed for slider 2:", err);
+      }
+    }
+  );
 }
 
 // Handle the primary slider (door slider)
