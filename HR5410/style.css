@@ -27,7 +27,7 @@ body {
 
 .iframe-container iframe {
   width: 100%;
-  height: 400 px;
+  height: 100%;
 }
 
 /* Right panel: controls */
