@@ -57,6 +57,8 @@ allowfullscreen>
 </iframe>
 ```
 
+This and  previous ones , currently, have both borders .
+
 ---
 
 # SGD5470 4-Part Sliding Door
@@ -78,6 +80,7 @@ allowfullscreen>
 </iframe>
 ```
 
+This has no outer border , but it does have the inner border ( for the settings part )
 ---
 
 # SH5400 Single Hung Radius (SH5400)
@@ -99,3 +102,4 @@ allowfullscreen>
 </iframe>
 ```
 
+Currently this has no outer border or inner border.

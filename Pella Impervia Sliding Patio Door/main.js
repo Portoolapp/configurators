@@ -645,6 +645,7 @@ document.querySelectorAll(".lock-button, .hardware-color").forEach((button) => {
 
     // Add the 'selected' class to the clicked color button
     event.target.classList.add("selected");
+    focusInterior();
     if (hex) {
       // If the element has a hex attribute, create a customColor object
       const customColor = {
