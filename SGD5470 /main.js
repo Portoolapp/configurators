@@ -1117,7 +1117,7 @@ function deviceType() {
   if (width <= 768) {
     console.log("phone");
     return "phone";
-  } else if (width > 768 && width <= 1200) {
+  } else if (width > 768 && width <= 1100) {
     console.log("tablet");
     return "tablet";
   } else {
