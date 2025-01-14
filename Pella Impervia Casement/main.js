@@ -1,13 +1,12 @@
 // Initialize Sketchfab Viewer
 const iframe = document.getElementById("api-frame");
 // const uid = "1db33543f4b54ca995c7babeb3949ba2"; // Replace with your model's UID
-const uid = "e57a95546ea9447188ba41a164116a3c"; // Replace with your model's UID
+const uid = "4aa3b9683f5e411888beee41dffc4e81"; // Replace with your model's UID
 let api;
 const version = "1.12.1";
 let base = {};
 let _nodes;
-let baseSash1 = [];
-let baseSash2 = [];
+let baseSash = [];
 let baseLock1 = [];
 let baseLock2 = [];
 let baseLocks = {};
@@ -18,9 +17,7 @@ let interiorColor = "white";
 let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
-const sliderItemId = 127;
-const slider1 = 37;
-const slider2 = 268;
+const sliderItemId = 676;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -34,49 +31,45 @@ VM3712:3 (3) [0.00003166594505310538, 0.017710406076908443, 1.5019633000373842]
 const cameraSettings = {
   laptop: {
     interior: {
-      position: [-0.11215700427743769, -5.587517613574884, 1.4828301211484645],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [0.148439014004323, -1.0533285524937674, 0.29217833007976873],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
     intermediate: {
-      position: [
-        -5.4358099317157444, -0.010258761232090574, 2.2076127865086095,
-      ],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [-0.9140587717288202, 0.02199295606619181, 0.27077962536745015],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
     exterior: {
-      position: [0.024959374445176607, 5.430287163967652, 1.9361797977034605],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [0.17189039390149485, 1.0861288296575846, 0.2936212500889904],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
   },
 
   tablet: {
     interior: {
-      position: [0.36539612054498494, -13.546582428143426, 2.3181670139770523],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [0.148439014004323, -1.0533285524937674, 0.29217833007976873],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
     intermediate: {
-      position: [
-        -13.272175693174132, -0.0006974292419513611, 3.843740131897576,
-      ],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [-0.9140587717288202, 0.02199295606619181, 0.27077962536745015],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
     exterior: {
-      position: [0.7150481694029635, 13.459018105750326, 1.906883699592313],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [0.17189039390149485, 1.0861288296575846, 0.2936212500889904],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
   },
   phone: {
     interior: {
-      position: [-0.14863265552171095, -7.498956879825079, 1.6257349643436996],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [0.148439014004323, -1.0533285524937674, 0.29217833007976873],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
     intermediate: {
-      position: [-7.450950183758143, -0.08381888142644281, 1.620612658793537],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [-0.9140587717288202, 0.02199295606619181, 0.27077962536745015],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
     exterior: {
-      position: [-0.0390792033060403, 7.401752883030953, 1.526067997751383],
-      target: [-0.002926144725093338, -0.05267581427915165, 1.0667952244884582],
+      position: [0.17189039390149485, 1.0861288296575846, 0.2936212500889904],
+      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
     },
   },
 };
@@ -231,8 +224,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [110, 335, 580, 793],
-  traditional: [215, 440, 685, 898],
+  prairie: [923],
+  traditional: [1024],
 };
 const handleID = 412;
 
@@ -242,6 +235,29 @@ function onSuccess(apiInstance) {
   api.addEventListener("viewerready", function () {
     console.log("Viewer is absolutely ready");
     onModelLoaded(api);
+  });
+
+  const button = document.getElementById("getCameraData");
+  const output = document.getElementById("output");
+
+  // Add a click event listener to the button
+  button.addEventListener("click", function () {
+    api.getCameraLookAt(function (err, camera) {
+      if (err) {
+        output.textContent = "Error fetching camera data.";
+        console.error(err);
+        return;
+      }
+
+      // Format the camera data
+      const formattedData = `
+position: [${camera.position.join(", ")}],
+target: [${camera.target.join(", ")}],
+                `.trim();
+
+      // Display the formatted data in the output element
+      output.textContent = formattedData;
+    });
   });
 }
 
@@ -257,8 +273,8 @@ client.init(uid, {
   preload: 1,
   animation_autoplay: 0,
   annotation: 0,
-  annotation_tooltip_visible: 1,
-  annotations_visible: 1,
+  annotation_tooltip_visible: 0,
+  annotations_visible: 0,
   ui_animations: 0,
   ui_controls: 0,
   ui_general_controls: 0,
@@ -295,7 +311,7 @@ function onModelLoaded(api) {
   console.log("Model has been loaded");
   console.log(`Device is ${deviceType()}`);
   logAllParts(api);
-  getSlidersWorldCoordinates(api);
+  getSliderWorldCoordinates(api);
   hideAllGrills();
   // Show the default grill (Traditional, for instance)
   showGrillType("traditional");
@@ -316,162 +332,46 @@ function onModelLoaded(api) {
     );
   }
   setTimeout(initialInteriorAndExterior, 2000);
-  // initializeMaterialEditor();
-  playStaticPoseAnimation(api);
-  initializeWindowAnimations(api);
+  initializeMaterialEditor();
 }
 
-// animation variables
-let staticAnimation = -1;
-let windowOpenAnimation = -1;
-let windowCloseAnimation = -1;
+function getSliderWorldCoordinates(api) {
+  const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
 
-function playWindowOpen() {
-  if (windowOpenAnimation === -1) {
-    console.error("WindowOpen animation UID is not initialized");
-    return;
-  }
-  api.setCurrentAnimationByUID(windowOpenAnimation, function (err) {
-    if (err) {
-      console.error("Error setting WindowOpen animation:", err);
-      return;
-    }
-    api.play(function (err) {
-      if (!err) {
-        console.log("WindowOpen animation is playing");
-      } else {
-        console.error("Error playing WindowOpen animation:", err);
-      }
-    });
-  });
-}
-
-function playWindowClose() {
-  if (windowCloseAnimation === -1) {
-    console.error("WindowClose animation UID is not initialized");
-    return;
-  }
-  api.setCurrentAnimationByUID(windowCloseAnimation, function (err) {
-    if (err) {
-      console.error("Error setting WindowClose animation:", err);
-      return;
-    }
-    api.play(function (err) {
-      if (!err) {
-        console.log("WindowClose animation is playing");
-      } else {
-        console.error("Error playing WindowClose animation:", err);
-      }
-    });
-  });
-}
-
-function initializeWindowAnimations(api) {
-  api.getAnimations(function (err, animations) {
-    if (err) {
-      console.error("Error fetching animations:", err);
-      return;
-    }
-
-    // Loop through animations to find "WindowOpen" and "WindowClose"
-    animations.forEach((animation) => {
-      const [uid, name] = animation; // Destructure UID and name
-      if (name === "WindowOpen") {
-        windowOpenAnimation = uid;
-        console.log("WindowOpen UID stored:", uid);
-      }
-      if (name === "WindowClose") {
-        windowCloseAnimation = uid;
-        console.log("WindowClose UID stored:", uid);
-      }
-    });
-
-    // Ensure both animations were found
-    if (windowOpenAnimation === -1) {
-      console.warn("WindowOpen animation not found");
-    }
-    if (windowCloseAnimation === -1) {
-      console.warn("WindowClose animation not found");
-    }
-  });
-}
-
-function playStaticPoseAnimation(api) {
-  // Fetch the list of animations
-  api.getAnimations(function (err, animations) {
-    if (err) {
-      console.error("Error fetching animations:", err);
-      return;
-    }
-
-    // Find the animation with the name "StaticPose"
-    const staticPoseAnimation = animations.find(
-      (animation) => animation[1] === "Static pose"
-    );
-    console.log("Here are all the animations :");
-    console.log(animations);
-
-    if (staticPoseAnimation) {
-      staticAnimation = staticPoseAnimation[0]; // UID of "StaticPose" animation
-
-      // Set the "StaticPose" animation as current
-      api.setCurrentAnimationByUID(staticAnimation, function (err) {
-        if (err) {
-          console.error("Error setting StaticPose animation:", err);
-          return;
-        }
-
-        // Play the animation
-        api.play(function (err) {
-          if (!err) {
-            console.log("StaticPose animation is now playing");
-          } else {
-            console.error("Error playing StaticPose animation:", err);
-          }
-        });
-      });
-    } else {
-      console.error("StaticPose animation not found in the list of animations");
-    }
-  });
-}
-
-function getSlidersWorldCoordinates(api) {
-  const nodeInstanceID1 = slider1; // The instance ID for the first slider
-  const nodeInstanceID2 = slider2; // The instance ID for the second slider
-
-  // Get the world matrix of the first node (slider1)
-  api.getMatrix(nodeInstanceID1, function (err, matrix1) {
+  // Get the world matrix of the node
+  api.getMatrix(nodeInstanceID, function (err, matrix) {
     if (!err) {
-      // Extract the X, Y, Z coordinates from the world matrix of slider1
-      const x1 = matrix1.world[12]; // X coordinate
-      const y1 = matrix1.world[13]; // Y coordinate
-      const z1 = matrix1.world[14]; // Z coordinate
+      // Extract the X, Y, Z coordinates from the world matrix
+      const x = matrix.world[12]; // X coordinate
+      const y = matrix.world[13]; // Y coordinate
+      const z = matrix.world[14]; // Z coordinate
 
       // Store them in the baseSash array
-      baseSash1 = [x1, y1, z1];
+      baseSash = [x, y, z];
 
-      console.log("Slider 1 World Coordinates: ", baseSash1);
+      console.log("Slider World Coordinates: ", baseSash);
     } else {
-      console.error("Error getting matrix for slider1:", err);
+      console.error("Error getting matrix for instance ID 217:", err);
     }
   });
 
-  // Get the world matrix of the second node (slider2)
-  api.getMatrix(nodeInstanceID2, function (err, matrix2) {
-    if (!err) {
-      // Extract the X, Y, Z coordinates from the world matrix of slider2
-      const x2 = matrix2.world[12]; // X coordinate
-      const y2 = matrix2.world[13]; // Y coordinate
-      const z2 = matrix2.world[14]; // Z coordinate
+  // also get the handles base values
+  locksId.forEach((id) => {
+    api.getMatrix(id, function (err, matrix) {
+      if (!err) {
+        // Extract the X, Y, Z coordinates from the world matrix
+        const x = matrix.world[12]; // X coordinate
+        const y = matrix.world[13]; // Y coordinate
+        const z = matrix.world[14]; // Z coordinate
 
-      // Store them in the baseSash array
-      baseSash2 = [x2, y2, z2];
+        // Store them in the baseLocks object with the ID as the key
+        baseLocks[id] = [x, y, z];
 
-      console.log("Slider 2 World Coordinates: ", baseSash2);
-    } else {
-      console.error("Error getting matrix for slider2:", err);
-    }
+        console.log(`Lock World Coordinates for ID ${id}:`, baseLocks[id]);
+      } else {
+        console.error(`Error getting matrix for instance ID ${id}:`, err);
+      }
+    });
   });
 }
 
@@ -519,62 +419,93 @@ function hideAllGrills() {
 }
 
 // Handle Slider Input (Door Slider)
+// function sliderHandler(event) {
+//   const element = event.target;
+//   const value = parseFloat(element.value);
+
+//   // const zOffset = -0.03;
+//   const zOffset = -0;
+//   // Directly use the instance ID for the primary slider node
+//   const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
+
+//   console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
+
+//   // Translate the primary slider
+//   const newPosition = [baseSash[0] + value, baseSash[1], baseSash[2] + zOffset];
+//   api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
+//     if (!err) {
+//       console.log("Object has been translated to", translateTo);
+//     } else {
+//       console.error("Translation failed:", err);
+//     }
+//   });
+
+//   // Translate the secondary objects
+//   if (locksId) {
+//     locksId.forEach((id) => {
+//       if (baseLocks[id]) {
+//         const newLockPosition = [
+//           baseLocks[id][0], // X remains the same
+//           baseLocks[id][1] + value, // Update Y by adding the slider value
+//           baseLocks[id][2], // Z remains the same
+//         ];
+
+//         api.translate(id, newLockPosition, {}, function (err, translateTo) {
+//           if (!err) {
+//             console.log(`Lock ${id} has been translated to`, translateTo);
+//           } else {
+//             console.error(`Translation for lock ${id} failed:`, err);
+//           }
+//         });
+//       } else {
+//         console.warn(`Base position for lock ${id} not found.`);
+//       }
+//     });
+//   }
+// }
+
 function sliderHandler(event) {
-  const element = event.target;
-  const value = parseFloat(element.value);
+  const nodeId = 676;
+  const hingePosition = [
+    0.019469332387173303, 0.008484662233992617, 0.5200631171832018,
+  ];
+  const angleDegrees = parseFloat(event.target.value);
+  const angleRadians = (Math.PI / 180) * angleDegrees; // Convert to radians
 
-  const zOffset = +0.02; // Adjust the Z offset if needed
-  const yOffset = +0.08;
-
-  // Instance IDs for both sliders
-  const nodeInstanceID1 = slider1; // The instance ID for slider1
-  const nodeInstanceID2 = slider2; // The instance ID for slider2
-
-  console.log(
-    `Slider value: ${value}, Node1: ${nodeInstanceID1}, Node2: ${nodeInstanceID2}`
-  );
-
-  // Update the X coordinates for both sliders
-  const newPosition1 = [
-    baseSash1[0] + value,
-    baseSash1[1] + yOffset,
-    baseSash1[2] + zOffset,
-  ]; // Subtract from slider1's X
-  const newPosition2 = [
-    baseSash2[0] - value,
-    baseSash2[1] + yOffset,
-    baseSash2[2] + zOffset,
-  ]; // Add to slider2's X
-
-  // Translate the first slider (slider1)
-  api.translate(
-    nodeInstanceID1,
-    newPosition1,
-    {},
-    function (err, translateTo1) {
-      if (!err) {
-        console.log("Slider 1 translated to", translateTo1);
-      } else {
-        console.error("Translation failed for slider 1:", err);
-      }
+  // 1. Translate to make the hinge position the pivot point
+  const translateToPivot = hingePosition.map((coord) => -coord); // Move to pivot
+  api.translate(nodeId, translateToPivot, {}, function (err) {
+    if (err) {
+      console.error("Failed to translate to pivot:", err);
+      return;
     }
-  );
 
-  // Translate the second slider (slider2)
-  api.translate(
-    nodeInstanceID2,
-    newPosition2,
-    {},
-    function (err, translateTo2) {
-      if (!err) {
-        console.log("Slider 2 translated to", translateTo2);
-      } else {
-        console.error("Translation failed for slider 2:", err);
+    // 2. Rotate around the pivot point
+    api.rotate(
+      nodeId,
+      [angleRadians * 100, 0, 1, 0],
+      { duration: 0.5 },
+      function (err, rotateTo) {
+        if (err) {
+          console.error("Failed to rotate:", err);
+          return;
+        }
+
+        console.log("Rotated to:", rotateTo);
+
+        // 3. Translate back to the original position
+        api.translate(nodeId, hingePosition, {}, function (err) {
+          if (err) {
+            console.error("Failed to restore position:", err);
+            return;
+          }
+
+          console.log("Rotation complete.");
+        });
       }
-    }
-  );
+    );
+  });
 }
-
 // Handle the primary slider (door slider)
 document
   .getElementById("primarySlider")
@@ -1234,7 +1165,7 @@ function deviceType() {
   if (width <= 768) {
     console.log("phone");
     return "phone";
-  } else if (width > 768 && width <= 1100) {
+  } else if (width > 768 && width <= 1200) {
     console.log("tablet");
     return "tablet";
   } else {
