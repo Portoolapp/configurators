@@ -542,25 +542,31 @@ h3 {
   }
 }
 
-/* for the animation interaction button  */
-/* Basic button styling */
-.action-btn {
-  background-color: white; /* White background */
-  color: black; /* Black text */
-  border: 2px solid black; /* Black border */
-  padding: 10px 20px; /* Padding for size */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin: 10px; /* Space between buttons */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+.animation-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 10px;
 }
 
-.action-btn:hover {
-  background-color: lightblue; /* Light blue background on hover */
-  color: white; /* White text on hover */
-  border-color: blue; /* Blue border on hover */
+.open-btn {
+  background-color: #4caf50;
+  color: white;
 }
 
-.action-btn:focus {
-  outline: none; /* Remove focus outline */
+.open-btn:hover {
+  background-color: #45a049;
+}
+
+.close-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.close-btn:hover {
+  background-color: #e53935;
 }

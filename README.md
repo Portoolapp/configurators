@@ -64,17 +64,17 @@ This and  previous ones , currently, have both borders .
 # SGD5470 4-Part Sliding Door
 ![SGD5470](images/sgd5470.png)
 Access the SGD5470 4-Part Sliding Door configurator using the link below:
-`https://portoolapp.github.io/configurators/SGD5470%20/final.html`
+`https://portoolapp.github.io/configurators/SGD5470/final.html`
 
 Or click here:
 
-**[SGD5470 4-Part Sliding Door Configurator](https://portoolapp.github.io/configurators/SGD5470%20/final.html)**
+**[SGD5470 4-Part Sliding Door Configurator](https://portoolapp.github.io/configurators/SGD5470/final.html)**
 
 Embed the configurator directly into your project using the following code:
 
 ```html
 <iframe
-src="https://portoolapp.github.io/configurators/SGD5470%20/final.html"
+src="https://portoolapp.github.io/configurators/SGD5470/final.html"
 style="border: none; width: 100vw; height: 100vh;"
 allowfullscreen>
 </iframe>

@@ -1,7 +1,7 @@
 // Initialize Sketchfab Viewer
 const iframe = document.getElementById("api-frame");
 // const uid = "1db33543f4b54ca995c7babeb3949ba2"; // Replace with your model's UID
-const uid = "4aa3b9683f5e411888beee41dffc4e81"; // Replace with your model's UID
+const uid = "566eee617f314be7924af0ea6c03679f"; // Replace with your model's UID
 let api;
 const version = "1.12.1";
 let base = {};
@@ -18,6 +18,9 @@ let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
 const sliderItemId = 676;
+const openButton = document.querySelector(".open-btn");
+const closeButton = document.querySelector(".close-btn");
+
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -224,8 +227,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [923],
-  traditional: [1024],
+  prairie: [864],
+  traditional: [985],
 };
 const handleID = 412;
 
@@ -333,8 +336,104 @@ function onModelLoaded(api) {
   }
   setTimeout(initialInteriorAndExterior, 2000);
   initializeMaterialEditor();
+
+  //animation stuff
+  setCycleToOne(api);
+
+  printAnimation(api);
+  linkAnimationButtons(api);
+}
+function setCycleToOne(api) {
+  api.setCycleMode("one", function (err) {
+    if (!err) {
+      window.console.log("Animation : Set animation cycle mode");
+      // setStaticPose(api);
+    }
+  });
+}
+function setStaticPose(api) {
+  api.pause(function (err) {
+    if (!err) {
+      api.seekTo(0, function (seekErr) {
+        if (!seekErr) {
+          console.log("Animation : Model reset to static pose");
+        } else {
+          console.error("Animation : Error seeking to time 0:", seekErr);
+        }
+      });
+    } else {
+      console.error("Animation : Error pausing animation:", err);
+    }
+  });
+}
+function printAnimation(api) {
+  api.getAnimations(function (err, animations) {
+    if (!err) {
+      console.log("Available Animations:");
+      animations.forEach(([uid, name, duration], index) => {
+        console.log(`Animation ${index + 1}:`);
+        console.log(`UID: ${uid}`);
+        console.log(`Name: ${name}`);
+        console.log(`Duration: ${duration.toFixed(2)} seconds`);
+      });
+    } else {
+      console.error("Animation : Error fetching animations:", err);
+    }
+  });
 }
 
+function linkAnimationButtons(api) {
+  openButton.addEventListener("click", () => {
+    api.getAnimations(function (err, animations) {
+      if (!err) {
+        const openAnimation = animations.find(
+          (anim) => anim[1].toLowerCase() === "open"
+        );
+        if (openAnimation) {
+          api.setCurrentAnimationByUID(openAnimation[0], function (err) {
+            if (!err) {
+              api.play(function (err) {
+                if (!err) {
+                  console.log("Open animation playing");
+                }
+              });
+            }
+          });
+        } else {
+          console.error("Open animation not found");
+        }
+      } else {
+        console.error("Error fetching animations:", err);
+      }
+    });
+  });
+
+  // Function to play "Close" animation
+  closeButton.addEventListener("click", () => {
+    api.getAnimations(function (err, animations) {
+      if (!err) {
+        const closeAnimation = animations.find(
+          (anim) => anim[1].toLowerCase() === "close"
+        );
+        if (closeAnimation) {
+          api.setCurrentAnimationByUID(closeAnimation[0], function (err) {
+            if (!err) {
+              api.play(function (err) {
+                if (!err) {
+                  console.log("Close animation playing");
+                }
+              });
+            }
+          });
+        } else {
+          console.error("Close animation not found");
+        }
+      } else {
+        console.error("Error fetching animations:", err);
+      }
+    });
+  });
+}
 function getSliderWorldCoordinates(api) {
   const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
 

@@ -24,17 +24,10 @@
           frameborder="0"
         ></iframe>
         <div class="slider-container">
-          <p>Slide to Open</p>
-          <input
-            node="98"
-            type="range"
-            id="primarySlider"
-            class="slider"
-            min="0"
-            max="0.60"
-            value="0"
-            step="0.03"
-          />
+          <div>
+            <button class="animation-btn open-btn">Open</button>
+            <button class="animation-btn close-btn">Close</button>
+          </div>
         </div>
       </div>
       <div class="configurator non-phone">
@@ -225,7 +218,7 @@
               </div>
             </div>
           </div>
-          <div class="">
+          <div class="debug">
             <button id="getCameraData">Get Camera Position and Target</button>
             <pre
               id="output"
