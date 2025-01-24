@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>3D Model Configurator</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="final.css" />
+    <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="iframe-container">
+        <iframe
+          src=""
+          id="api-frame"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          frameborder="0"
+        ></iframe>
+        <div class="slider-container">
+          <div>
+            <button class="animation-btn open-btn">Open</button>
+            <button class="animation-btn close-btn">Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="configurator non-phone">
+        <div class="centered-content">
+          <h3>Select Interior Color</h3>
+          <div class="color-options interior">
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="black"
+                style="background-color: #16151c"
+              >
+                <!-- <img src="colors/black.png" alt="" /> -->
+              </button>
+              <span class="color-text">Black</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="bronze"
+                style="background-color: #4d4b47"
+              >
+                <!-- <img src="colors/Bronze.png" alt="" /> -->
+              </button>
+              <span class="color-text">Bronze</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="white"
+                style="background-color: #f3f4f5"
+              ></button>
+              <span class="color-text">White</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="beige"
+                style="background-color: #816f51"
+              >
+                <!-- <img src="colors/Beige.png" alt="" /> -->
+              </button>
+              <span class="color-text">Beige</span>
+            </div>
+          </div>
+          <div class="spacer"></div>
+          <h3>Select Exterior Color</h3>
+          <div class="color-options exterior">
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="black"
+                style="background-color: #16151c"
+              ></button>
+              <span class="color-text">Black</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="bronze"
+                style="background-color: #4d4b47"
+              ></button>
+              <span class="color-text">Bronze</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="white"
+                style="background-color: #f3f4f5"
+              ></button>
+              <span class="color-text">White</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="beige"
+                style="background-color: #816f51"
+              ></button>
+              <span class="color-text">Beige</span>
+            </div>
+          </div>
+
+          <div class="spacer"></div>
+          <h3>Select Hardware Colors</h3>
+          <div class="color-options hardware">
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="satin-nickel"
+                hex="#d2d2cd"
+                metalness="1"
+                glossiness="0.97"
+                roughness="0.03"
+                specular="0.9"
+                style="background-color: #74726d"
+              ></button>
+              <!-- <button
+                class="hardware-color tile"
+                data-color="satin-nickel"
+                hex="#74726d"
+                metalness="0.9"
+                glossiness="0.8"
+                roughness="0.1"
+                specular="0.7"
+                style="background-color: #74726d"
+              ></button> -->
+              <span class="color-text">Satin Nickel</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="white"
+                hex="#f0eeef"
+                metalness="0.2"
+                glossiness="0.5"
+                roughness="0.6"
+                specular="0.4"
+                style="background-color: #f0eeef"
+              ></button>
+              <span class="color-text">White</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="matte-black"
+                hex="#212121"
+                metalness="0.0"
+                glossiness="0.1"
+                roughness="0.9"
+                specular="0.05"
+                style="background-color: #212121"
+              ></button>
+              <span class="color-text">Matte Black</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="tan"
+                hex="#beae94"
+                metalness="0.1"
+                glossiness="0.6"
+                roughness="0.3"
+                specular="0.5"
+                style="background-color: #beae94"
+              ></button>
+              <span class="color-text">Tan</span>
+            </div>
+
+            <!-- <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="morning-sky-gray"
+                hex="#a2a0a0"
+                metalness="0.3"
+                glossiness="0.4"
+                roughness="0.5"
+                specular="0.6"
+                style="background-color: #bebebb"
+              ></button>
+              <span class="color-text">Morning Sky Gray</span>
+            </div> -->
+          </div>
+          <div class="spacer"></div>
+          <h3 class="grillheading">Select Grille Pattern</h3>
+          <div class="grille-pattern-menu">
+            <div class="grille-options">
+              <div class="grille-option" data-pattern="no-grilles">
+                <img src="colors/No Grilles.png" alt="No Grilles" />
+                <span>No Grilles</span>
+              </div>
+              <div class="grille-option" data-pattern="traditional">
+                <img src="colors/Traditional Grilles.png" alt="Traditional" />
+                <span>Traditional</span>
+              </div>
+
+              <div class="grille-option" data-pattern="prairie">
+                <img src="colors/Prairie Grilles.png" alt="Prairie" />
+                <span>Prairie</span>
+              </div>
+            </div>
+          </div>
+          <div class="debug">
+            <button id="getCameraData">Get Camera Position and Target</button>
+            <pre
+              id="output"
+              style="
+                margin-top: 10px;
+                background: #f4f4f4;
+                padding: 10px;
+                border: 1px solid #ccc;
+              "
+            ></pre>
+          </div>
+          <div class="debug">
+            <!-- Button to get the current camera position and target -->
+            <button id="getCamera">Get Camera Position & Target</button>
+
+            <!-- Button to recenter the camera -->
+            <button id="recenterCamera">Recenter Camera</button>
+
+            <!-- Inputs for setting the camera position -->
+            <label for="cameraPosX">Position X:</label>
+            <input type="number" id="cameraPosX" placeholder="0" />
+            <label for="cameraPosY">Position Y:</label>
+            <input type="number" id="cameraPosY" placeholder="0" />
+            <label for="cameraPosZ">Position Z:</label>
+            <input type="number" id="cameraPosZ" placeholder="0" />
+
+            <!-- Inputs for setting the camera target -->
+            <label for="cameraTargetX">Target X:</label>
+            <input type="number" id="cameraTargetX" placeholder="0" />
+            <label for="cameraTargetY">Target Y:</label>
+            <input type="number" id="cameraTargetY" placeholder="0" />
+            <label for="cameraTargetZ">Target Z:</label>
+            <input type="number" id="cameraTargetZ" placeholder="0" />
+
+            <!-- Button to set the camera position and target -->
+            <button id="setCamera">Set Camera Position & Target</button>
+          </div>
+
+          <div class="rough debug">
+            <h1>Material Channel Editor</h1>
+            <form id="material-editor">
+              <div id="input-container"></div>
+              <button type="button" id="apply-button">Apply Changes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="configuratormobile phone-only">
+        <!-- Page 1: Interior Color -->
+        <div class="page1">
+          <div class="heading">
+            <h3>Interior Color</h3>
+          </div>
+          <div class="color-options interior scrollable-options">
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="black"
+                style="background-color: #16151c"
+              >
+                <!-- <img src="colors/black.png" alt="" /> -->
+              </button>
+              <span class="color-text">Black</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="bronze"
+                style="background-color: #4d4b47"
+              >
+                <!-- <img src="colors/Bronze.png" alt="" /> -->
+              </button>
+              <span class="color-text">Bronze</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="white"
+                style="background-color: #f3f4f5"
+              ></button>
+              <span class="color-text">White</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="interior-color tile"
+                data-color="beige"
+                style="background-color: #816f51"
+              >
+                <!-- <img src="colors/Beige.png" alt="" /> -->
+              </button>
+              <span class="color-text">Beige</span>
+            </div>
+          </div>
+          <div class="navigation">
+            <div class="nav-item left">
+              <div class="arrow">&lt;</div>
+
+              <div class="text">Grill Patterns</div>
+            </div>
+            <div class="nav-item center">
+              <div class="cross">×</div>
+              <div class="text">Reset</div>
+            </div>
+            <div class="nav-item right">
+              <div class="arrow">&gt;</div>
+              <!-- Greater than symbol -->
+              <div class="text">Exterior Color</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page 2: Exterior Color -->
+        <div class="page2">
+          <div class="heading">
+            <h3>Exterior Color</h3>
+          </div>
+          <div class="color-options exterior scrollable-options">
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="black"
+                style="background-color: #16151c"
+              ></button>
+              <span class="color-text">Black</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="bronze"
+                style="background-color: #4d4b47"
+              ></button>
+              <span class="color-text">Bronze</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="white"
+                style="background-color: #f3f4f5"
+              ></button>
+              <span class="color-text">White</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="exterior-color tile"
+                data-color="beige"
+                style="background-color: #816f51"
+              ></button>
+              <span class="color-text">Beige</span>
+            </div>
+          </div>
+          <div class="navigation">
+            <div class="nav-item left">
+              <div class="arrow">&lt;</div>
+              <!-- Less than symbol -->
+              <div class="text">Interior Color</div>
+            </div>
+            <div class="nav-item center">
+              <div class="cross">×</div>
+              <div class="text">Reset</div>
+            </div>
+            <div class="nav-item right">
+              <div class="arrow">&gt;</div>
+              <!-- Greater than symbol -->
+              <div class="text">Hardware Color</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page 3: Hardware Color -->
+        <div class="page3">
+          <div class="heading">
+            <h3>Hardware Color</h3>
+          </div>
+          <div class="color-options hardware scrollable-options">
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="satin-nickel"
+                hex="#74726d"
+                metalness="0.9"
+                glossiness="0.8"
+                roughness="0.1"
+                specular="0.7"
+                style="background-color: #74726d"
+              ></button>
+              <span class="color-text">Satin Nickel</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="white"
+                hex="#f0eeef"
+                metalness="0.2"
+                glossiness="0.5"
+                roughness="0.6"
+                specular="0.4"
+                style="background-color: #f0eeef"
+              ></button>
+              <span class="color-text">White</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="matte-black"
+                hex="#212121"
+                metalness="0.0"
+                glossiness="0.1"
+                roughness="0.9"
+                specular="0.05"
+                style="background-color: #212121"
+              ></button>
+              <span class="color-text">Matte Black</span>
+            </div>
+
+            <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="tan"
+                hex="#beae94"
+                metalness="0.1"
+                glossiness="0.6"
+                roughness="0.3"
+                specular="0.5"
+                style="background-color: #beae94"
+              ></button>
+              <span class="color-text">Tan</span>
+            </div>
+
+            <!-- <div class="color-option">
+              <button
+                class="hardware-color tile"
+                data-color="morning-sky-gray"
+                hex="#bebebb"
+                metalness="0.3"
+                glossiness="0.4"
+                roughness="0.5"
+                specular="0.6"
+                style="background-color: #bebebb"
+              ></button>
+              <span class="color-text">Morning Sky Gray</span>
+            </div> -->
+          </div>
+          <div class="navigation">
+            <div class="nav-item left">
+              <div class="arrow">&lt;</div>
+              <!-- Less than symbol -->
+              <div class="text">Exterior Color</div>
+            </div>
+            <div class="nav-item center">
+              <div class="cross">×</div>
+              <div class="text">Reset</div>
+            </div>
+            <div class="nav-item right">
+              <div class="arrow">&gt;</div>
+              <!-- Greater than symbol -->
+              <div class="text">Grille Pattern</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page 4: Grille Pattern -->
+        <div class="page4">
+          <div class="heading">
+            <h3>Grill Pattern</h3>
+          </div>
+          <div class="grille-options scrollable-options-grill">
+            <div class="grille-option" data-pattern="no-grilles">
+              <img src="colors/No Grilles.png" alt="No Grilles" />
+              <span>No Grilles</span>
+            </div>
+            <div class="grille-option" data-pattern="traditional">
+              <img src="colors/Traditional Grilles.png" alt="Traditional" />
+              <span>Traditional</span>
+            </div>
+            <div class="grille-option" data-pattern="prairie">
+              <img src="colors/Prairie Grilles.png" alt="Prairie" />
+              <span>Prairie</span>
+            </div>
+          </div>
+          <div class="navigation">
+            <div class="nav-item left">
+              <div class="arrow">&lt;</div>
+              <!-- Less than symbol -->
+              <div class="text">Hardware Color</div>
+            </div>
+            <div class="nav-item center">
+              <div class="cross">×</div>
+              <div class="text">Reset</div>
+            </div>
+            <div class="nav-item right">
+              <div class="arrow">&gt;</div>
+              <!-- Greater than symbol -->
+              <div class="text">
+                <div class="text">Interior Color</div>
+              </div>
+              <!-- No next page in this case -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="main.js" `></script>
+  </body>
+</html>
