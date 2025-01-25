@@ -21,6 +21,9 @@ let handleColor = undefined;
 let myMaterials = [];
 const sliderItemId = 1224;
 const secondaryItemId = 610;
+// Global constants for node IDs
+const LOWER_SASH = 610;
+const UPPER_SASH = 1224;
 const slider1 = 37;
 const slider2 = 270;
 /*!SECTION
@@ -182,10 +185,6 @@ const tiltAnimation = {
   },
 };
 
-// Global constants for node IDs
-const LOWER_SASH = 632;
-const UPPER_SASH = 1246;
-
 // Function to linearly interpolate between current and destination matrices
 function interpolateMatrix(api, nodeId, destinationMatrix, duration, callback) {
   api.getMatrix(nodeId, function (err, matrixObj) {
@@ -312,6 +311,43 @@ function rotateNodeX(nodeId, duration = 1.0) {
     }
   });
 }
+
+const rotationSlider = document.getElementById("rotationSlider");
+function updateRotation(value) {
+  // Convert the slider value to radians, scaling it between 0 and PI
+  const radAngle = value * Math.PI;
+
+  // The axis of rotation: here we assume you want to rotate around the X axis.
+  const axisX = 1;
+  const axisY = 0;
+  const axisZ = 0;
+
+  // Call the rotate function from the API
+  api.rotate(
+    LOWER_SASH,
+    [radAngle, axisX, axisY, axisZ],
+    {
+      duration: 0.5, // Set the duration of the rotation animation (in seconds)
+      easing: "easeOutQuad", // You can choose any easing method
+    },
+    function (err, rotateTo) {
+      if (!err) {
+        console.log("Object has been rotated according to", rotateTo);
+        console.log(
+          "Object has been rotated to this value of the slider : ",
+          value
+        );
+      } else {
+        console.error("Error rotating the object:", err);
+      }
+    }
+  );
+}
+// for the rotation slider
+rotationSlider.addEventListener("input", function (event) {
+  const value = parseFloat(event.target.value);
+  updateRotation(value);
+});
 const cameraSettings = {
   laptop: {
     interior: {

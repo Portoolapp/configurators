@@ -135,6 +135,27 @@ h3 {
   cursor: pointer;
 }
 
+.rotationslider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Remove default thumb appearance for WebKit browsers */
+  appearance: none; /* Remove default appearance */
+  width: 20px; /* Thumb width */
+  height: 20px; /* Thumb height */
+  background: skyblue; /* Thumb color */
+  border-radius: 50%; /* Circular thumb */
+  cursor: pointer; /* Cursor when hovering over thumb */
+  transition: background 0.3s; /* Smooth transition when thumb color changes */
+}
+
+/* Style the thumb for Firefox */
+.rotationslider::-moz-range-thumb {
+  width: 20px; /* Thumb width */
+  height: 20px; /* Thumb height */
+  background: skyblue; /* Thumb color */
+  border-radius: 50%; /* Circular thumb */
+  cursor: pointer; /* Cursor when hovering over thumb */
+  transition: background 0.3s; /* Smooth transition when thumb color changes */
+}
+
 .color-options {
   display: flex;
   flex-wrap: wrap;
