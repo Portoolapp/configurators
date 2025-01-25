@@ -1,12 +1,14 @@
 // Initialize Sketchfab Viewer
 const iframe = document.getElementById("api-frame");
 // const uid = "1db33543f4b54ca995c7babeb3949ba2"; // Replace with your model's UID
-const uid = "fca6f2d911b14d5fbc3735f03b67f646"; // Replace with your model's UID
+// const uid = "69f0e676e3344e47afab5dd55ff3ae0f"; // uid of double hung with animations
+const uid = "82888e4ada70422189731a70489705bb";
 let api;
 const version = "1.12.1";
 let base = {};
 let _nodes;
-let baseSash = [];
+let baseSash1 = [];
+let baseSash2 = [];
 let baseLock1 = [];
 let baseLock2 = [];
 let baseLocks = {};
@@ -17,10 +19,10 @@ let interiorColor = "white";
 let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
-const sliderItemId = 676;
-const openButton = document.querySelector(".open-btn");
-const closeButton = document.querySelector(".close-btn");
-
+const sliderItemId = 1224;
+const secondaryItemId = 610;
+const slider1 = 37;
+const slider2 = 270;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -31,48 +33,339 @@ undefined
 VM3712:2 (3) [0.00984113250497559, 2.79028723950023, 1.7007123991535738]
 VM3712:3 (3) [0.00003166594505310538, 0.017710406076908443, 1.5019633000373842]
 */
+
+const tiltAnimation = {
+  lower_initial: {
+    local: [
+      1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.6009600162506104,
+      1.1506500244140625, -2.038909912109375, 1,
+    ],
+    world: {
+      0: 0.01,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 2.22045e-18,
+      6: 0.01,
+      7: 0,
+      8: 0,
+      9: -0.01,
+      10: 2.22045e-18,
+      11: 0,
+      12: 0.016009600162506105,
+      13: 0.020389099121093754,
+      14: 0.01150650024414062,
+      15: 1,
+    },
+  },
+  upper_initial: {
+    local: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.60096, 29.693, -0.601931, 1],
+    world: {
+      0: 0.01,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 2.22045e-18,
+      6: 0.01,
+      7: 0,
+      8: 0,
+      9: -0.01,
+      10: 2.22045e-18,
+      11: 0,
+      12: 0.0160096,
+      13: 0.006019310000000066,
+      14: 0.29693,
+      15: 1,
+    },
+  },
+  lower_stand: {
+    local: [
+      1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.6009600162506104, 9.27027416229248,
+      -2.0389089584350586, 1,
+    ],
+    world: {
+      0: 0.01,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 2.22045e-18,
+      6: 0.01,
+      7: 0,
+      8: 0,
+      9: -0.01,
+      10: 2.22045e-18,
+      11: 0,
+      12: 0.016009600162506105,
+      13: 0.02038908958435061,
+      14: 0.0927027416229248,
+      15: 1,
+    },
+  },
+  lower_tilt: {
+    local: [
+      0.999999943298375, 0.00017086511934888892, -0.000290186770078846, 0,
+      -0.00017086510629481114, -0.4851138217438041, -0.8744510564268152, 0,
+      -0.00029018677776522826, 0.8744510564268128, -0.48511376504217907, 0,
+      1.60096, 9.33767, -2.03891, 1,
+    ],
+    world: {
+      0: 0.00999999943298375,
+      1: 0.0000029018677007884605,
+      2: 0.0000017086511934888887,
+      3: 0,
+      4: -0.0000017086510629481115,
+      5: 0.00874451056426815,
+      6: -0.004851138217438043,
+      7: 0,
+      8: -0.0000029018677776522827,
+      9: 0.004851137650421792,
+      10: 0.008744510564268126,
+      11: 0,
+      12: 0.0160096,
+      13: 0.02038910000000002,
+      14: 0.09337669999999999,
+      15: 1,
+    },
+  },
+  upper_sit: {
+    local: [
+      1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.6009600162506104,
+      21.309356689453125, -0.6019319891929626, 1,
+    ],
+    world: {
+      0: 0.01,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 2.22045e-18,
+      6: 0.01,
+      7: 0,
+      8: 0,
+      9: -0.01,
+      10: 2.22045e-18,
+      11: 0,
+      12: 0.016009600162506105,
+      13: 0.006019319891929675,
+      14: 0.21309356689453127,
+      15: 1,
+    },
+  },
+  upper_tilt: {
+    local: [
+      0.9999999431932516, 0.00017056548196862779, -0.0002907248039058446, 0,
+      -0.00017056548178429195, -0.48786750325978606, -0.8729177026379489, 0,
+      -0.00029072480401399266, 0.8729177026379489, -0.4878674464530377, 0,
+      1.6009639501571655, 21.239795684814453, -0.6019319891929626, 1,
+    ],
+    world: {
+      0: 0.009999999431932517,
+      1: 0.0000029072480390584463,
+      2: 0.0000017056548196862773,
+      3: 0,
+      4: -0.0000017056548178429195,
+      5: 0.008729177026379487,
+      6: -0.004878675032597863,
+      7: 0,
+      8: -0.0000029072480401399265,
+      9: 0.004878674464530379,
+      10: 0.008729177026379487,
+      11: 0,
+      12: 0.016009639501571655,
+      13: 0.006019319891929674,
+      14: 0.21239795684814453,
+      15: 1,
+    },
+  },
+};
+
+// Global constants for node IDs
+const LOWER_SASH = 632;
+const UPPER_SASH = 1246;
+
+// Function to linearly interpolate between current and destination matrices
+function interpolateMatrix(api, nodeId, destinationMatrix, duration, callback) {
+  api.getMatrix(nodeId, function (err, matrixObj) {
+    if (err) {
+      console.error("Error fetching current matrix:", err);
+      return;
+    }
+
+    // Extract the `local` matrix
+    const currentMatrix = matrixObj.local;
+
+    // Validate the matrix structure
+    if (!currentMatrix || currentMatrix.length !== 16) {
+      console.error("Invalid matrix structure:", currentMatrix);
+      return;
+    }
+
+    const steps = Math.ceil(duration / 16); // ~60 FPS
+    const stepDelta = Array(16)
+      .fill(0)
+      .map((_, i) => (destinationMatrix[i] - currentMatrix[i]) / steps);
+
+    let step = 0;
+
+    function animate() {
+      if (step >= steps) {
+        // Finalize by setting the exact destination matrix
+        api.setMatrix(nodeId, destinationMatrix, function (err) {
+          if (err) {
+            console.error("Error setting matrix:", err);
+          } else if (callback) {
+            callback();
+          }
+        });
+        return;
+      }
+
+      // Compute the intermediate matrix
+      const intermediateMatrix = currentMatrix.map(
+        (val, i) => val + step * stepDelta[i]
+      );
+
+      // Set the intermediate matrix
+      api.setMatrix(nodeId, intermediateMatrix, function (err) {
+        if (err) {
+          console.error("Error setting matrix during animation:", err);
+        }
+      });
+
+      step++;
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  });
+}
+function setMatrix(id, matrix) {
+  console.log("Matrix before:");
+  getMatrix(id);
+  api.setMatrix(id, matrix.local, function (err) {
+    if (!err) {
+      window.console.log("Matrix set");
+      console.log("Matrix after:");
+      getMatrix(id);
+    }
+  });
+}
+// Function to play the tilt animation sequence
+function playTiltAnimation(api) {
+  // Animate lower sash to "lower_stand" then to "lower_tilt"
+  interpolateMatrix(
+    api,
+    LOWER_SASH,
+    tiltAnimation.lower_stand,
+    500,
+    function () {
+      interpolateMatrix(
+        api,
+        LOWER_SASH,
+        tiltAnimation.lower_tilt,
+        500,
+        function () {
+          // After lower sash animation, animate upper sash to "upper_sit" then to "upper_tilt"
+          interpolateMatrix(
+            api,
+            UPPER_SASH,
+            tiltAnimation.upper_sit,
+            500,
+            function () {
+              interpolateMatrix(
+                api,
+                UPPER_SASH,
+                tiltAnimation.upper_tilt,
+                500,
+                function () {
+                  console.log("Tilt animation completed.");
+                }
+              );
+            }
+          );
+        }
+      );
+    }
+  );
+}
+
+function rotateNodeX(nodeId, duration = 1.0) {
+  // Convert -120 degrees to radians
+  const radAngle = (120 * Math.PI) / 180;
+
+  // Define rotation parameters
+  const rotateTo = [radAngle, 1, 0, 0]; // Rotate around the X-axis
+  const options = {
+    duration: duration, // Animation duration in seconds
+    easing: "easeOutQuad", // Smooth easing
+  };
+
+  // Call the Sketchfab rotate API
+  api.rotate(nodeId, rotateTo, options, function (err, rotateTo) {
+    if (!err) {
+      console.log(`Node ${nodeId} rotated successfully to`, rotateTo);
+    } else {
+      console.error(`Error rotating node ${nodeId}:`, err);
+    }
+  });
+}
 const cameraSettings = {
   laptop: {
     interior: {
-      position: [0.148439014004323, -1.0533285524937674, 0.29217833007976873],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [0.07293992496851537, -2.4738738450816036, 0.7735439458435225],
+      target: [0.030520262780313376, -0.04339921944218825, 0.5866693227452184],
     },
     intermediate: {
-      position: [-0.9140587717288202, 0.02199295606619181, 0.27077962536745015],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [-2.3537542778272345, 0.031055808028151832, 1.0902761359143873],
+      target: [0.030520262780313376, -0.04339921944218825, 0.5866693227452184],
     },
     exterior: {
-      position: [0.17189039390149485, 1.0861288296575846, 0.2936212500889904],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [0.012030785195712795, 2.3773109324582653, 0.8760634451459333],
+      target: [0.030520262780313376, -0.04339921944218825, 0.5866693227452184],
     },
   },
 
   tablet: {
     interior: {
-      position: [0.148439014004323, -1.0533285524937674, 0.29217833007976873],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [-0.015868213272777293, -3.246484646947164, 1.0163477636609553],
+      target: [
+        -0.0045842219754267536, 0.0075103268176937655, 0.6153091209981855,
+      ],
     },
     intermediate: {
-      position: [-0.9140587717288202, 0.02199295606619181, 0.27077962536745015],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [-3.2382630184152035, 0.06125908344163162, 1.1537096440964913],
+      target: [
+        -0.0045842219754267536, 0.0075103268176937655, 0.6153091209981855,
+      ],
     },
     exterior: {
-      position: [0.17189039390149485, 1.0861288296575846, 0.2936212500889904],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [0.11247729526095579, 3.2837711391375297, 0.5722475198315641],
+      target: [
+        -0.0045842219754267536, 0.0075103268176937655, 0.6153091209981855,
+      ],
     },
   },
   phone: {
     interior: {
-      position: [0.148439014004323, -1.0533285524937674, 0.29217833007976873],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [-0.016868115494094227, -2.148275459116784, 1.0269600789535196],
+      target: [
+        -0.000005441286417638837, 0.015930801518594648, 0.5345934765860052,
+      ],
     },
     intermediate: {
-      position: [-0.9140587717288202, 0.02199295606619181, 0.27077962536745015],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [-2.1997344205780345, 0.024289219006150442, 0.8306011014937053],
+      target: [
+        -0.000005441286417638837, 0.015930801518594648, 0.5345934765860052,
+      ],
     },
     exterior: {
-      position: [0.17189039390149485, 1.0861288296575846, 0.2936212500889904],
-      target: [0.1558592159417824, 0.016459046695711348, 0.2755310074825756],
+      position: [-0.03193887696818398, 2.2324168412785936, 0.6471450235159705],
+      target: [
+        -0.000005441286417638837, 0.015930801518594648, 0.5345934765860052,
+      ],
     },
   },
 };
@@ -137,7 +430,7 @@ navigateTo("page1");
 
 document
   .querySelector(".page1 .nav-item.left")
-  .addEventListener("click", () => navigateTo("page4")); // Going left from page1 to page4
+  .addEventListener("click", () => navigateTo("page3")); // Going left from page1 to page4
 
 document
   .querySelector(".page1 .nav-item.right")
@@ -159,16 +452,8 @@ document
 
 document
   .querySelector(".page3 .nav-item.right")
-  .addEventListener("click", () => navigateTo("page4")); // Going right from page3 to page4
+  .addEventListener("click", () => navigateTo("page1")); // Going right from page3 to page4
 
-// Page 4: Grille Pattern navigation
-document
-  .querySelector(".page4 .nav-item.left")
-  .addEventListener("click", () => navigateTo("page3")); // Going left from page4 to page3
-
-document
-  .querySelector(".page4 .nav-item.right")
-  .addEventListener("click", () => navigateTo("page1")); // Going right from page4 to page1
 const interiorColors = {
   white: "#f3f4f5",
   black: "#000000",
@@ -227,8 +512,8 @@ function setColor(materialName, hexcode) {
 }
 
 const grillTypes = {
-  prairie: [864],
-  traditional: [985],
+  prairie: [992, 1582],
+  traditional: [1129, 1719],
 };
 const handleID = 412;
 
@@ -238,29 +523,6 @@ function onSuccess(apiInstance) {
   api.addEventListener("viewerready", function () {
     console.log("Viewer is absolutely ready");
     onModelLoaded(api);
-  });
-
-  const button = document.getElementById("getCameraData");
-  const output = document.getElementById("output");
-
-  // Add a click event listener to the button
-  button.addEventListener("click", function () {
-    api.getCameraLookAt(function (err, camera) {
-      if (err) {
-        output.textContent = "Error fetching camera data.";
-        console.error(err);
-        return;
-      }
-
-      // Format the camera data
-      const formattedData = `
-position: [${camera.position.join(", ")}],
-target: [${camera.target.join(", ")}],
-                `.trim();
-
-      // Display the formatted data in the output element
-      output.textContent = formattedData;
-    });
   });
 }
 
@@ -314,7 +576,7 @@ function onModelLoaded(api) {
   console.log("Model has been loaded");
   console.log(`Device is ${deviceType()}`);
   logAllParts(api);
-  getSliderWorldCoordinates(api);
+  getSlidersWorldCoordinates(api);
   hideAllGrills();
   // Show the default grill (Traditional, for instance)
   showGrillType("traditional");
@@ -341,8 +603,8 @@ function onModelLoaded(api) {
   setCycleToOne(api);
 
   printAnimation(api);
-  linkAnimationButtons(api);
 }
+
 function setCycleToOne(api) {
   api.setCycleMode("one", function (err) {
     if (!err) {
@@ -382,59 +644,51 @@ function printAnimation(api) {
   });
 }
 
-function linkAnimationButtons(api) {
-  openButton.addEventListener("click", () => {
-    api.getAnimations(function (err, animations) {
-      if (!err) {
-        const openAnimation = animations.find(
-          (anim) => anim[1].toLowerCase() === "lowertilt"
-        );
-        if (openAnimation) {
-          api.setCurrentAnimationByUID(openAnimation[0], function (err) {
-            if (!err) {
-              api.play(function (err) {
-                if (!err) {
-                  console.log("Open animation playing");
-                }
-              });
-            }
-          });
+// Function to play animation by UID
+function playAnimationByUID(api, uid) {
+  api.setCurrentAnimationByUID(uid, function (err) {
+    if (!err) {
+      api.play(function (err) {
+        if (!err) {
+          console.log(`Animation with UID: ${uid} is playing.`);
         } else {
-          console.error("Open animation not found");
+          console.error(`Error playing animation with UID: ${uid}`, err);
         }
-      } else {
-        console.error("Error fetching animations:", err);
-      }
-    });
-  });
-
-  // Function to play "Close" animation
-  closeButton.addEventListener("click", () => {
-    api.getAnimations(function (err, animations) {
-      if (!err) {
-        const closeAnimation = animations.find(
-          (anim) => anim[1].toLowerCase() === "uppertilt"
-        );
-        if (closeAnimation) {
-          api.setCurrentAnimationByUID(closeAnimation[0], function (err) {
-            if (!err) {
-              api.play(function (err) {
-                if (!err) {
-                  console.log("Close animation playing");
-                }
-              });
-            }
-          });
-        } else {
-          console.error("Close animation not found");
-        }
-      } else {
-        console.error("Error fetching animations:", err);
-      }
-    });
+      });
+    } else {
+      console.error(`Error setting animation with UID: ${uid}`, err);
+    }
   });
 }
-function getSliderWorldCoordinates(api) {
+
+function getMatrix(nodeId) {
+  api.getMatrix(nodeId, function (err, matrix) {
+    if (!err) {
+      window.console.log("Matrix:");
+      window.console.log(matrix);
+    }
+  });
+}
+
+// Function to play animation by Name
+function playAnimationByName(api, name) {
+  api.getAnimations(function (err, animations) {
+    if (!err) {
+      const animation = animations.find(
+        (anim) => anim[1].toLowerCase() === name.toLowerCase()
+      );
+      if (animation) {
+        playAnimationByUID(api, animation[0]); // Call playAnimationByUID using the found UID
+      } else {
+        console.error(`Animation with name "${name}" not found.`);
+      }
+    } else {
+      console.error("Error fetching animations:", err);
+    }
+  });
+}
+
+function getSlidersWorldCoordinates(api) {
   const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
 
   // Get the world matrix of the node
@@ -446,31 +700,27 @@ function getSliderWorldCoordinates(api) {
       const z = matrix.world[14]; // Z coordinate
 
       // Store them in the baseSash array
-      baseSash = [x, y, z];
+      baseSash2 = [x, y, z];
 
-      console.log("Slider World Coordinates: ", baseSash);
+      console.log("Slider World Coordinates: ", baseSash2);
     } else {
       console.error("Error getting matrix for instance ID 217:", err);
     }
   });
+  api.getMatrix(secondaryItemId, function (err, matrix) {
+    if (!err) {
+      // Extract the X, Y, Z coordinates from the world matrix
+      const x = matrix.world[12]; // X coordinate
+      const y = matrix.world[13]; // Y coordinate
+      const z = matrix.world[14]; // Z coordinate
 
-  // also get the handles base values
-  locksId.forEach((id) => {
-    api.getMatrix(id, function (err, matrix) {
-      if (!err) {
-        // Extract the X, Y, Z coordinates from the world matrix
-        const x = matrix.world[12]; // X coordinate
-        const y = matrix.world[13]; // Y coordinate
-        const z = matrix.world[14]; // Z coordinate
+      // Store them in the baseSecondary array
+      baseSash1 = [x, y, z];
 
-        // Store them in the baseLocks object with the ID as the key
-        baseLocks[id] = [x, y, z];
-
-        console.log(`Lock World Coordinates for ID ${id}:`, baseLocks[id]);
-      } else {
-        console.error(`Error getting matrix for instance ID ${id}:`, err);
-      }
-    });
+      console.log("Secondary World Coordinates: ", baseSash1);
+    } else {
+      console.error("Error getting matrix for instance ID 217:", err);
+    }
   });
 }
 
@@ -518,97 +768,68 @@ function hideAllGrills() {
 }
 
 // Handle Slider Input (Door Slider)
-// function sliderHandler(event) {
-//   const element = event.target;
-//   const value = parseFloat(element.value);
-
-//   // const zOffset = -0.03;
-//   const zOffset = -0;
-//   // Directly use the instance ID for the primary slider node
-//   const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
-
-//   console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
-
-//   // Translate the primary slider
-//   const newPosition = [baseSash[0] + value, baseSash[1], baseSash[2] + zOffset];
-//   api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
-//     if (!err) {
-//       console.log("Object has been translated to", translateTo);
-//     } else {
-//       console.error("Translation failed:", err);
-//     }
-//   });
-
-//   // Translate the secondary objects
-//   if (locksId) {
-//     locksId.forEach((id) => {
-//       if (baseLocks[id]) {
-//         const newLockPosition = [
-//           baseLocks[id][0], // X remains the same
-//           baseLocks[id][1] + value, // Update Y by adding the slider value
-//           baseLocks[id][2], // Z remains the same
-//         ];
-
-//         api.translate(id, newLockPosition, {}, function (err, translateTo) {
-//           if (!err) {
-//             console.log(`Lock ${id} has been translated to`, translateTo);
-//           } else {
-//             console.error(`Translation for lock ${id} failed:`, err);
-//           }
-//         });
-//       } else {
-//         console.warn(`Base position for lock ${id} not found.`);
-//       }
-//     });
-//   }
-// }
-
 function sliderHandler(event) {
-  const nodeId = 676;
-  const hingePosition = [
-    0.019469332387173303, 0.008484662233992617, 0.5200631171832018,
+  const element = event.target;
+  const value = parseFloat(element.value);
+  const multiplier = 1; // if small values are not moving the parts
+
+  // const zOffset = -0.03;
+  const zOffset = -0;
+  // Directly use the instance ID for the primary slider node
+  const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
+
+  console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
+
+  // Translate the primary slider
+  const newPosition = [
+    baseSash1[0],
+    baseSash1[1] + value * multiplier,
+    baseSash1[2] + zOffset,
   ];
-  const angleDegrees = parseFloat(event.target.value);
-  const angleRadians = (Math.PI / 180) * angleDegrees; // Convert to radians
-
-  // 1. Translate to make the hinge position the pivot point
-  const translateToPivot = hingePosition.map((coord) => -coord); // Move to pivot
-  api.translate(nodeId, translateToPivot, {}, function (err) {
-    if (err) {
-      console.error("Failed to translate to pivot:", err);
-      return;
+  api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
+    if (!err) {
+      console.log("Object has been translated to", translateTo);
+    } else {
+      console.error("Translation failed:", err);
     }
-
-    // 2. Rotate around the pivot point
-    api.rotate(
-      nodeId,
-      [angleRadians * 100, 0, 1, 0],
-      { duration: 0.5 },
-      function (err, rotateTo) {
-        if (err) {
-          console.error("Failed to rotate:", err);
-          return;
-        }
-
-        console.log("Rotated to:", rotateTo);
-
-        // 3. Translate back to the original position
-        api.translate(nodeId, hingePosition, {}, function (err) {
-          if (err) {
-            console.error("Failed to restore position:", err);
-            return;
-          }
-
-          console.log("Rotation complete.");
-        });
-      }
-    );
   });
 }
+
+function secondarySliderHandler(event) {
+  const element = event.target;
+  const value = parseFloat(element.value);
+  const multiplier = 1; // if small values are not moving the parts
+
+  // const zOffset = -0.03;
+  const zOffset = -0;
+  // Directly use the instance ID for the primary slider node
+  const nodeInstanceID = secondaryItemId; // The instance ID for the primary slider
+
+  console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
+
+  // Translate the primary slider
+  const newPosition = [
+    baseSash2[0],
+    baseSash2[1] + value * multiplier,
+    baseSash2[2] + zOffset,
+  ];
+  api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
+    if (!err) {
+      console.log("Object has been translated to", translateTo);
+    } else {
+      console.error("Translation failed:", err);
+    }
+  });
+}
+
 // Handle the primary slider (door slider)
 document
   .getElementById("primarySlider")
   .addEventListener("input", sliderHandler);
+
+document
+  .getElementById("secondarySlider")
+  .addEventListener("input", secondarySliderHandler);
 
 document.querySelectorAll(".interior-color").forEach((element) => {
   element.addEventListener("click", interiorColorSelectHandler);

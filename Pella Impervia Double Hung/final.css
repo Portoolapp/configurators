@@ -64,8 +64,8 @@ h3 {
   gap: 10px;
   margin: 10px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  /* border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); */
   overflow: scroll;
 }
 
@@ -540,33 +540,4 @@ h3 {
   .spacer {
     height: 0px; /* Smaller height for mobile devices */
   }
-}
-
-.animation-btn {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 10px;
-}
-
-.open-btn {
-  background-color: #4caf50;
-  color: white;
-}
-
-.open-btn:hover {
-  background-color: #45a049;
-}
-
-.close-btn {
-  background-color: #f44336;
-  color: white;
-}
-
-.close-btn:hover {
-  background-color: #e53935;
 }
