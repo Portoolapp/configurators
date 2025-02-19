@@ -23,12 +23,9 @@ body {
   width: 100%;
   /* max-width: 1200px; */
   height: 100vh;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+
   overflow: hidden;
   background-color: #fff;
-  margin-left: 1rem;
-  margin-right: 1rem;
 }
 
 h3 {
@@ -119,20 +116,20 @@ h3 {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: lightgreen;
+  background-color: black;
   border: 2px solid #fff;
   cursor: pointer;
 }
 
 .slider::-webkit-slider-thumb:hover {
-  background-color: green;
+  background-color: rgb(78, 78, 78);
 }
 
 .slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: lightgreen;
+  background-color: black;
   border: 2px solid #fff;
   cursor: pointer;
 }

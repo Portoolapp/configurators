@@ -18,7 +18,7 @@ let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
 const sliderItemId = 304;
-const zoomOut=0.5;
+const zoomOut=0.6;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -1163,7 +1163,7 @@ function isNearPosition(currentPos, targetPos, threshold = 0.05) {
 function focusExterior() {
   // Get the current device type (laptop or tablet)
   const device = deviceType(); // Returns either 'laptop' or 'tablet'
-
+  
   // Get the camera settings for the current device
   const exterior = cameraSettings[device].exterior;
   const interior = cameraSettings[device].interior;
