@@ -18,6 +18,7 @@ let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
 const sliderItemId = 304;
+const zoomOut=0.5;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -1170,9 +1171,9 @@ function focusExterior() {
 
   // Adjust the camera position to be closer for a larger view
   const closerExteriorPosition = [
-    exterior.position[0] * 0.7, // Adjust X position
-    exterior.position[1] * 0.7, // Adjust Y position
-    exterior.position[2] * 0.7  // Adjust Z position
+    exterior.position[0] * zoomOut, // Adjust X position
+    exterior.position[1] * zoomOut, // Adjust Y position
+    exterior.position[2] * zoomOut  // Adjust Z position
   ];
 
   // Get the current camera position and target
@@ -1213,9 +1214,9 @@ function focusInterior() {
 
   // Adjust the camera position to be closer for a larger view
   const closerInteriorPosition = [
-    interior.position[0] * 0.7, // Adjust X position
-    interior.position[1] * 0.7, // Adjust Y position
-    interior.position[2] * 0.7  // Adjust Z position
+    interior.position[0] * zoomOut, // Adjust X position
+    interior.position[1] * zoomOut, // Adjust Y position
+    interior.position[2] * zoomOut  // Adjust Z position
   ];
 
   // Get the current camera position and target
