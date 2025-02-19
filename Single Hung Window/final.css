@@ -6,6 +6,7 @@
 .debug {
   display: none !important;
 }
+
 body {
   font-family: "Roboto", sans-serif;
   display: flex;
@@ -138,7 +139,7 @@ h3 {
 .color-options {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start; /* Center items */
+  justify-content: center; /* Center items */
   gap: 10px;
   margin: 0px 0;
 }
@@ -489,9 +490,9 @@ h3 {
   flex-wrap: nowrap !important;
 }
 .scrollable-options-grill {
-  display: block; /* block-level container */
-  overflow-x: auto; /* Allow horizontal scrolling */
-  white-space: nowrap; /* Prevent items from wrapping */
+  display: flex; /* block-level container */
+  flex-wrap: wrap;
+  justify-content: center;
   -webkit-overflow-scrolling: touch;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -540,4 +541,10 @@ h3 {
   .spacer {
     height: 0px; /* Smaller height for mobile devices */
   }
+}
+
+
+.modal-title{
+  padding-bottom: 20px;
+  font-size: 28px;
 }

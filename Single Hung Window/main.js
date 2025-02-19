@@ -468,6 +468,16 @@ function interiorColorSelectHandler(event) {
 
   interiorColor = selectedColor;
 
+  // Capitalize the first letter of the selected color
+  const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
+  
+  document.querySelector(".interior-selected-color").textContent = capitalizedColor;
+  const colorValue = event.target.getAttribute("data-value");
+  document.querySelectorAll(".interior-selected-color").forEach((element) => {
+    element.textContent = capitalizedColor;
+    element.style.color =colorValue
+  });
+ 
   // Remove the 'selected' class from all color buttons
   document.querySelectorAll(".interior-color").forEach((button) => {
     button.classList.remove("selected");
@@ -619,6 +629,18 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
 function exteriorColorSelectHandler(event) {
   focusExterior();
   const selectedColor = event.target.getAttribute("data-color");
+  exteriorColor = selectedColor;
+  const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
+  document.querySelectorAll(".exterior-selected-color").forEach((element) => {
+    element.textContent = capitalizedColor;
+  
+    // Get the data-value attribute and set it as the color
+    const colorValue = event.target.getAttribute("data-value");
+    element.style.color = colorValue;
+  });
+
+  
+
   console.log(`Selected color : ${selectedColor}`);
   document.querySelectorAll(".exterior-color").forEach((button) => {
     button.classList.remove("selected");
@@ -697,6 +719,18 @@ document.querySelectorAll(".lock-button, .hardware-color").forEach((button) => {
   button.addEventListener("click", (event) => {
     const selectedColor = event.target.getAttribute("data-color");
     const hex = event.target.getAttribute("hex");
+
+    const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
+  
+    document.querySelectorAll(".hardware-selected-color").forEach((element) => {
+      element.textContent = capitalizedColor;
+    
+      if (hex === "#f0eeef") {
+        element.style.color = "#d4d4d4";
+      } else {
+        element.style.color = hex;
+      }
+    });
     document.querySelectorAll(".hardware-color").forEach((button) => {
       button.classList.remove("selected");
     });
@@ -1006,6 +1040,12 @@ document.querySelectorAll(".grille-option").forEach((option) => {
   option.addEventListener("click", (event) => {
     // Get the value of the data-pattern attribute
     const pattern = option.getAttribute("data-pattern");
+    console.log(pattern)
+    const capitalizedColor = pattern.charAt(0).toUpperCase() + pattern.slice(1);
+  
+    document.querySelectorAll(".grille-selected-color").forEach((element) => {
+      element.textContent = capitalizedColor;
+    });
     showGrillType(pattern);
 
     // Remove the 'selected' class from all options
@@ -1023,6 +1063,7 @@ document.querySelectorAll(".grille-option").forEach((option) => {
 
 document.querySelectorAll(".nav-item.center").forEach((element) => {
   element.addEventListener("click", (event) => {
+    
     const selectedColor = "white";
     const extColor = "black";
     console.log(`Selected color : ${selectedColor}`);
