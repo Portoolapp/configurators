@@ -289,10 +289,12 @@ function onModelLoaded(api) {
   console.log(`Device is ${deviceType()}`);
   logAllParts(api);
   getSliderWorldCoordinates(api);
-  hideAllGrills();
+
+  hideAllGrills();  
   // Show the default grill (Traditional, for instance)
   showGrillType("traditional");
   logAllMaterials(api);
+
   if (deviceType() == "tablet") {
     console.log("Setting tab to tab interior");
     api.setCameraLookAt(
@@ -1166,6 +1168,13 @@ function focusExterior() {
   const interior = cameraSettings[device].interior;
   const intermediate = cameraSettings[device].intermediate;
 
+  // Adjust the camera position to be closer for a larger view
+  const closerExteriorPosition = [
+    exterior.position[0] * 0.7, // Adjust X position
+    exterior.position[1] * 0.7, // Adjust Y position
+    exterior.position[2] * 0.7  // Adjust Z position
+  ];
+
   // Get the current camera position and target
   api.getCameraLookAt(function (err, camera) {
     if (err) {
@@ -1181,9 +1190,9 @@ function focusExterior() {
         "Dest:Exterior Initial:Near Interior Path:Intermediate needed"
       );
       setCamera(intermediate.position, intermediate.target, 1);
-      setTimeout(delayedExterior, 700);
+      setTimeout(() => setCamera(closerExteriorPosition, exterior.target, 1), 700);
     } else {
-      setCamera(exterior.position, exterior.target, 2);
+      setCamera(closerExteriorPosition, exterior.target, 2);
     }
   });
 }
@@ -1202,6 +1211,13 @@ function focusInterior() {
   const exterior = cameraSettings[device].exterior;
   const intermediate = cameraSettings[device].intermediate;
 
+  // Adjust the camera position to be closer for a larger view
+  const closerInteriorPosition = [
+    interior.position[0] * 0.7, // Adjust X position
+    interior.position[1] * 0.7, // Adjust Y position
+    interior.position[2] * 0.7  // Adjust Z position
+  ];
+
   // Get the current camera position and target
   api.getCameraLookAt(function (err, camera) {
     if (err) {
@@ -1217,9 +1233,9 @@ function focusInterior() {
         "Dest:Interior Initial:Near Exterior Path:Intermediate needed"
       );
       setCamera(intermediate.position, intermediate.target, 1);
-      setTimeout(delayedInterior, 700);
+      setTimeout(() => setCamera(closerInteriorPosition, interior.target, 1), 700);
     } else {
-      setCamera(interior.position, interior.target, 2);
+      setCamera(closerInteriorPosition, interior.target, 2);
     }
   });
 }
