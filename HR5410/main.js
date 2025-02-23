@@ -58,6 +58,20 @@ const cameraSettings = {
     },
   },
 
+  // phone: {
+  //   interior: {
+  //     position: [0.005557163028385189, -3.654313353010164, 2.205952216412704],
+  //     target: [0.004207514783489496, 0.05013429816957483, 1.7923437200998993],
+  //   },
+  //   intermediate: {
+  //     position: [-3.6827763239497204, 0.023868010462204492, 2.3395790124137283],
+  //     target: [0.004207514783489496, 0.05013429816957483, 1.7923437200998993],
+  //   },
+  //   exterior: {
+  //     position: [0.030351733911707805, 3.7656378338581664, 2.089591371386416],
+  //     target: [0.004207514783489496, 0.05013429816957483, 1.7923437200998993],
+  //   },
+  // },
   phone: {
     interior: {
       position: [0.005557163028385189, -3.654313353010164, 2.205952216412704],
@@ -72,6 +86,7 @@ const cameraSettings = {
       target: [0.004207514783489496, 0.05013429816957483, 1.7923437200998993],
     },
   },
+  
 };
 
 let interiorCameraPos = [
@@ -449,6 +464,10 @@ document
 document.querySelectorAll(".interior-color").forEach((element) => {
   element.addEventListener("click", interiorColorSelectHandler);
 });
+
+// document.querySelectorAll(".interior-color").forEach((element) => {
+//   element.addEventListener("click", interiorColorSelectHandler);
+// });
 function initialInteriorAndExterior() {
   console.log("Initial white interior button press");
   // Select the button with the class "interior-color" and data-color="white"
@@ -459,12 +478,13 @@ function initialInteriorAndExterior() {
 
   setColor("Exterior", interiorColors["black"]);
 }
-
+//Select Interior Color
 function interiorColorSelectHandler(event) {
   focusInterior();
-  console.log(`Button pressed : ${event.target}`);
   const selectedColor = event.target.getAttribute("data-color");
-  console.log(`Selected color : ${selectedColor}`);
+  document.getElementById("selected-interior").innerHTML = selectedColor;
+  document.getElementById("selected-phone-interior").innerHTML = selectedColor;
+  // document.getElementById("selected-phone").innerHTML = selectedColor;
 
   interiorColor = selectedColor;
 
@@ -476,6 +496,7 @@ function interiorColorSelectHandler(event) {
   // Add the 'selected' class to the clicked color button
   event.target.classList.add("selected");
   setColor("Interior", interiorColors[interiorColor]);
+  //fix
   // if (interiorColor === "white") {
   //   // showAllExteriorColors();
   //   console.log("No need to disable any Exterior colors");
@@ -488,14 +509,18 @@ function interiorColorSelectHandler(event) {
   // TODO : update selections
   updateExteriorColorOptionsv2(interiorColor);
 }
-
+// Select Exterior Color
 function showAllExteriorColors() {
   // Show all exterior color circles
   const exteriorColorCircles = document.querySelectorAll(".exterior-color");
+  document.getElementById("selected-exterior").innerHTML = exteriorColorCircles;
+  document.getElementById('selected-phone-exterior').innerHTML = exteriorColorCircles;
   exteriorColorCircles.forEach((circle) => {
     circle.style.display = "inline-block";
   });
 }
+
+
 document.querySelectorAll(".exterior-color").forEach((element) => {
   element.addEventListener("click", exteriorColorSelectHandler);
 });
@@ -507,7 +532,6 @@ function updateExteriorColorOptions(selectedInteriorColor) {
   const exteriorColorCircles = document.querySelectorAll(".exterior-color");
   if (selectedInteriorColor == "white") {
     exteriorColorCircles.forEach((circle) => {
-      const exteriorColor = circle.getAttribute("data-color");
       circle.style.opacity = "1";
       circle.style.pointerEvents = "auto";
       circle.style.filter = "none";
@@ -518,10 +542,11 @@ function updateExteriorColorOptions(selectedInteriorColor) {
   } else {
     exteriorColorCircles.forEach((circle) => {
       const exteriorColor = circle.getAttribute("data-color");
+      
       if (selectedInteriorColor === exteriorColor) {
-        console.log(
-          `For interior: ${selectedInteriorColor} and exterior: ${exteriorColor}, the decision is the same`
-        );
+        // console.log(
+        //   `For interior: ${selectedInteriorColor} and exterior: ${exteriorColor}, the decision is the same`
+        // );
         // Enable the matching exterior color
         document.querySelectorAll(".exterior-color").forEach((button) => {
           button.classList.remove("selected");
@@ -530,12 +555,12 @@ function updateExteriorColorOptions(selectedInteriorColor) {
         // Add the 'selected' class to the clicked color button
 
         document.querySelectorAll(".exterior-color").forEach((button) => {
-          console.log("Inside the query selector");
-          console.log(
-            `data-color attr= ${button.getAttribute(
-              "data-color"
-            )}  and selectedInternalColor = ${selectedInteriorColor}`
-          );
+          // console.log("Inside the query selector");
+          // console.log(
+          //   `data-color attr= ${button.getAttribute(
+          //     "data-color"
+          //   )}  and selectedInternalColor = ${selectedInteriorColor}`
+          // );
           if (button.getAttribute("data-color") === selectedInteriorColor) {
             button.classList.add("selected");
           } else {
@@ -543,7 +568,7 @@ function updateExteriorColorOptions(selectedInteriorColor) {
           }
         });
 
-        console.log("Current focus statement executed ? ");
+      
         circle.style.opacity = "1";
         circle.style.pointerEvents = "auto";
         circle.style.filter = "none"; // Reset any disabled styles
@@ -559,7 +584,6 @@ function updateExteriorColorOptions(selectedInteriorColor) {
 }
 
 function updateExteriorColorOptionsv2(selectedInteriorColor) {
-  console.log(`Selected Interior Color: ${selectedInteriorColor}`);
 
   // Remove any 'blocked-overlay' class from all exterior color buttons
   document.querySelectorAll(".exterior-color").forEach((button) => {
@@ -574,27 +598,21 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
 
   // Check for matching exterior color options based on the selected interior color
   if (colorCombinations[selectedInteriorColor]) {
-    console.log(
-      `Available exterior colors for "${selectedInteriorColor}": ${colorCombinations[selectedInteriorColor]}`
-    );
+   
 
     // Flag to check if we've auto-selected the first exterior option
     let autoSelected = false;
 
     exteriorColorCircles.forEach((circle) => {
       const exteriorColor = circle.getAttribute("data-color");
-      console.log(
-        `Inside Updateexteriorcoloroptionsv2 , exterior Color = ${exteriorColor}`
-      );
       // Check if the exterior color is valid for the selected interior color
       if (colorCombinations[selectedInteriorColor].includes(exteriorColor)) {
-        console.log(`Enabling exterior color: ${exteriorColor}`);
-
         // If we haven't auto-selected yet, select the first valid color automatically
         if (!autoSelected) {
           circle.classList.add("selected");
           setColor("Exterior", interiorColors[exteriorColor]);
-          console.log(`Auto-selected exterior color: ${exteriorColor}`);
+          document.getElementById("selected-exterior").innerHTML = exteriorColor;
+          document.getElementById("selected-phone-exterior").innerHTML = exteriorColor;
           autoSelected = true; // Set flag so we don't auto-select again
         } else {
           // Dont block the other permissible colors
@@ -619,7 +637,8 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
 function exteriorColorSelectHandler(event) {
   focusExterior();
   const selectedColor = event.target.getAttribute("data-color");
-  console.log(`Selected color : ${selectedColor}`);
+  console.log(`Selected color exterior43534 : ${selectedColor}`);
+  document.getElementById('selected-phone-exterior').innerHTML = selectedColor;
   document.querySelectorAll(".exterior-color").forEach((button) => {
     button.classList.remove("selected");
   });
@@ -627,6 +646,7 @@ function exteriorColorSelectHandler(event) {
   // Add the 'selected' class to the clicked color button
   event.target.classList.add("selected");
   exteriorColor = selectedColor;
+  document.getElementById("selected-exterior").innerHTML = selectedColor;
   setColor("Exterior", interiorColors[exteriorColor]);
 }
 
@@ -638,7 +658,6 @@ const grillButtons = document.querySelectorAll(".grill-button");
 grillButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     const selectedGrill = e.target.id;
-    console.log(`Grill type selected: ${selectedGrill}`);
     updateGrillButtonStyles(selectedGrill);
     showGrillType(selectedGrill);
   });
@@ -696,6 +715,8 @@ function logAllMaterials(api) {
 document.querySelectorAll(".lock-button, .hardware-color").forEach((button) => {
   button.addEventListener("click", (event) => {
     const selectedColor = event.target.getAttribute("data-color");
+    document.getElementById("selected-hardware").innerHTML= selectedColor;
+    document.getElementById("selected-phone-hardware").innerHTML= selectedColor;
     const hex = event.target.getAttribute("hex");
     document.querySelectorAll(".hardware-color").forEach((button) => {
       button.classList.remove("selected");
@@ -1017,7 +1038,9 @@ document.querySelectorAll(".grille-option").forEach((option) => {
     option.classList.add("selected");
 
     // Log the selected pattern
-    console.log(`Selected grille pattern: ${pattern}`);
+    document.getElementById("selected-grille").innerHTML = pattern;
+    document.getElementById("selected-phone-grille").innerHTML = pattern;
+
   });
 });
 
@@ -1025,7 +1048,6 @@ document.querySelectorAll(".nav-item.center").forEach((element) => {
   element.addEventListener("click", (event) => {
     const selectedColor = "white";
     const extColor = "black";
-    console.log(`Selected color : ${selectedColor}`);
 
     interiorColor = selectedColor;
 
@@ -1098,7 +1120,7 @@ function deviceType() {
   const width = window.innerWidth;
 
   if (width <= 768) {
-    console.log("phone");
+ 
     return "phone";
   } else if (width > 768 && width <= 1200) {
     console.log("tablet");
@@ -1199,6 +1221,7 @@ function setCamera(position, target, duration = 2, callback) {
 }
 
 // Hook up buttons to camera settings
+
 document.getElementById("interiorBtn").addEventListener("click", function () {
   const interior = cameraSettings.laptop.interior;
   setCamera(interior.position, interior.target);
