@@ -515,6 +515,7 @@ function updateExteriorColorOptions(selectedInteriorColor) {
     document.querySelectorAll(".exterior-color").forEach((button) => {
       button.classList.remove("selected");
     });
+  } else {
     exteriorColorCircles.forEach((circle) => {
       const exteriorColor = circle.getAttribute("data-color");
       if (selectedInteriorColor === exteriorColor) {

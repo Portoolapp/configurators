@@ -3,57 +3,36 @@
   margin: 0;
   padding: 0;
 }
-
 .debug {
   display: none !important;
 }
-
 body {
   font-family: "Roboto", sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  /* background-color: #f9f9f9; */
+  background-color: #f9f9f9;
   padding-top: env(safe-area-inset-top);
 }
 
 .container {
   display: flex;
   width: 100%;
-  /* max-width: 1440px; */
+  /* max-width: 1200px; */
   height: 100vh;
+  border: 1px solid #ddd;
   border-radius: 8px;
+  overflow: hidden;
   background-color: #fff;
-  /* margin-left: 1rem; */
-  /* margin-right: 1rem; */
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 h3 {
   margin-bottom: 15px;
   font-size: 1.2em;
   font-weight: 500;
-}
-
-.selected-color {
-  display: flex;
-  justify-content: left !important;
-  align-items: center !important;
-  font-weight: bold;
-}
-
-/* .selected {
-  padding-left: 10px;
-  font-weight: bold;
-} */
-
-.selected {
-  display: block;
-  padding-left: 10px;
-}
-
-.selected:first-letter {
-  text-transform: uppercase;
 }
 
 .grillheading {
@@ -63,20 +42,17 @@ h3 {
 .iframe-container {
   flex: 7;
   display: flex;
-  min-height: 100%;
-  /* Ensure container fills height */
-  height: 100%;
-  /* Set explicit height */
+  min-height: 100%; /* Ensure container fills height */
+  height: 100%; /* Set explicit height */
   width: 100%;
   position: relative;
 }
 
 .iframe-container iframe {
   width: 100%;
-  height: 100%;
-  /* Makes iframe expand to container height */
-  min-height: 50vh;
-  /* Ensures at least 50% of the viewport height */
+  height: 100%; /* Makes iframe expand to container height */
+  min-height: 50vh; /* Ensures at least 50% of the viewport height */
+
   border: none;
 }
 
@@ -86,10 +62,11 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* margin: 10px; */
+  margin: 10px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: scroll;
 }
 
 .configurator h2 {
@@ -109,15 +86,12 @@ h3 {
 
 .slider-container {
   position: absolute;
-  bottom: 10px;
-  /* Adjust this for the space from the bottom */
+  bottom: 10px; /* Adjust this for the space from the bottom */
   left: 50%;
-  transform: translateX(-50%);
-  /* Center the slider container horizontally */
+  transform: translateX(-50%); /* Center the slider container horizontally */
   text-align: center;
   width: 50%;
-  z-index: 10;
-  /* Ensures the slider is above the iframe */
+  z-index: 10; /* Ensures the slider is above the iframe */
 }
 
 /* Heading and paragraph inside the slider container */
@@ -143,20 +117,20 @@ h3 {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #161616;
+  background-color: lightgreen;
   border: 2px solid #fff;
   cursor: pointer;
 }
 
 .slider::-webkit-slider-thumb:hover {
-  background-color: black;
+  background-color: green;
 }
 
 .slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #161616;
+  background-color: lightgreen;
   border: 2px solid #fff;
   cursor: pointer;
 }
@@ -164,9 +138,7 @@ h3 {
 .color-options {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
-  justify-content: space-around;
-  /* Center items */
+  justify-content: start; /* Center items */
   gap: 10px;
   margin: 0px 0;
 }
@@ -175,71 +147,51 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  /* Center text under button */
-  max-width: 100px;
-  /* Prevent overflow of long text */
+  text-align: center; /* Center text under button */
+  max-width: 100px; /* Prevent overflow of long text */
 }
 
 .interior-color {
-  border: 0px solid #ccc;
-  /* Optional border for better visibility */
+  border: 0px solid #ccc; /* Optional border for better visibility */
   cursor: pointer;
   transition: transform 0.2s, border-color 0.2s;
 }
 
 .interior-color.selected {
   border: 2px solid #4caf50;
-  transform: scale(1.1);
-  /* Slightly enlarge the selected color button */
+  transform: scale(1.1); /* Slightly enlarge the selected color button */
 }
-
 .interior-color.selected::before {
-  content: "↓";
-  /* Downward arrow */
-  color: #4caf50;
-  /* Green color for the arrow */
-  font-size: 18px;
-  /* Adjust size of the arrow */
+  content: "↓"; /* Downward arrow */
+  color: #4caf50; /* Green color for the arrow */
+  font-size: 18px; /* Adjust size of the arrow */
   position: absolute;
-  top: -25px;
-  /* Position above the button */
+  top: -25px; /* Position above the button */
   left: 50%;
   transform: translateX(-50%);
 }
 
 .exterior-color {
-  border: 0px solid #ccc;
-  /* Optional border for better visibility */
+  border: 0px solid #ccc; /* Optional border for better visibility */
   cursor: pointer;
   transition: transform 0.2s, border-color 0.2s;
 }
-
 .exterior-color.selected {
   border: 2px solid #4caf50;
-  transform: scale(1.1);
-  /* Slightly enlarge the selected color button */
+  transform: scale(1.1); /* Slightly enlarge the selected color button */
 }
-
 .exterior-color.selected::before {
-  content: "↓";
-  /* Downward arrow */
-  color: #4caf50;
-  /* Green color for the arrow */
-  font-size: 18px;
-  /* Adjust size of the arrow */
+  content: "↓"; /* Downward arrow */
+  color: #4caf50; /* Green color for the arrow */
+  font-size: 18px; /* Adjust size of the arrow */
   position: absolute;
-  top: -25px;
-  /* Position above the button */
+  top: -25px; /* Position above the button */
   left: 50%;
   transform: translateX(-50%);
 }
-
 .blocked-overlay {
-  position: relative;
-  /* Set relative positioning to allow pseudo-elements to overlay */
-  display: inline-block;
-  /* Ensure it works for inline elements too */
+  position: relative; /* Set relative positioning to allow pseudo-elements to overlay */
+  display: inline-block; /* Ensure it works for inline elements too */
   pointer-events: none;
 }
 
@@ -251,15 +203,11 @@ h3 {
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 0, 0, 0.1);
-  /* Optional red overlay */
-  pointer-events: none;
-  /* Prevent overlay from interfering with clicks */
-  border-radius: 50%;
-  /* Make it a circle */
+  background: rgba(255, 0, 0, 0.1); /* Optional red overlay */
+  pointer-events: none; /* Prevent overlay from interfering with clicks */
+  border-radius: 50%; /* Make it a circle */
   border: 2px solid red !important;
-  z-index: 11;
-  /* Red circle */
+  z-index: 11; /* Red circle */
 }
 
 .blocked-overlay::before {
@@ -267,52 +215,37 @@ h3 {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 80%;
-  /* Slightly smaller than the circle */
-  height: 2px;
-  /* Thickness of the diagonal line */
-  background-color: red;
-  /* Red diagonal line */
-  transform: translate(-50%, -50%) rotate(45deg);
-  /* Diagonal cross line */
-  pointer-events: none;
-  /* Ensure it’s unclickable */
+  width: 80%; /* Slightly smaller than the circle */
+  height: 2px; /* Thickness of the diagonal line */
+  background-color: red; /* Red diagonal line */
+  transform: translate(-50%, -50%) rotate(45deg); /* Diagonal cross line */
+  pointer-events: none; /* Ensure it’s unclickable */
 }
 
 .hardware-color {
-  border: 0px solid #ccc;
-  /* Optional border for better visibility */
+  border: 0px solid #ccc; /* Optional border for better visibility */
   cursor: pointer;
   transition: transform 0.2s, border-color 0.2s;
 }
 
 .hardware-color.selected {
   border: 2px solid #4caf50;
-  transform: scale(1.1);
-  /* Slightly enlarge the selected color button */
+  transform: scale(1.1); /* Slightly enlarge the selected color button */
 }
-
 .hardware-color.selected::before {
-  content: "↓";
-  /* Downward arrow */
-  color: #4caf50;
-  /* Green color for the arrow */
-  font-size: 18px;
-  /* Adjust size of the arrow */
+  content: "↓"; /* Downward arrow */
+  color: #4caf50; /* Green color for the arrow */
+  font-size: 18px; /* Adjust size of the arrow */
   position: absolute;
-  top: -25px;
-  /* Position above the button */
+  top: -25px; /* Position above the button */
   left: 50%;
   transform: translateX(-50%);
 }
 
 .tile {
-  width: 50px;
-  /* Fixed width */
-  height: 50px;
-  /* Fixed height */
-  border-radius: 8px;
-  /* Rounded edges */
+  width: 50px; /* Fixed width */
+  height: 50px; /* Fixed height */
+  border-radius: 8px; /* Rounded edges */
 }
 
 .tile img {
@@ -326,8 +259,7 @@ h3 {
   margin-top: 8px;
   font-size: 14px;
   /* word-wrap: break-word; Ensures long words break */
-  max-width: 50px;
-  /* Matches button width */
+  max-width: 50px; /* Matches button width */
   line-height: 1.2;
 }
 
@@ -367,8 +299,7 @@ h3 {
 }
 
 .exterior-color[style*="pointer-events: none"] {
-  cursor: not-allowed;
-  /* Change cursor to indicate disabled state */
+  cursor: not-allowed; /* Change cursor to indicate disabled state */
 }
 
 .grille-option {
@@ -377,23 +308,16 @@ h3 {
   cursor: pointer;
   text-align: center;
 }
-
 .grille-option.selected img {
   border: 2px solid #4caf50 !important;
-  transform: scale(1.1);
-  /* Slightly enlarge the selected color button */
+  transform: scale(1.1); /* Slightly enlarge the selected color button */
 }
-
 .grille-option.selected::before {
-  content: "↓";
-  /* Downward arrow */
-  color: #4caf50;
-  /* Green color for the arrow */
-  font-size: 18px;
-  /* Adjust size of the arrow */
+  content: "↓"; /* Downward arrow */
+  color: #4caf50; /* Green color for the arrow */
+  font-size: 18px; /* Adjust size of the arrow */
   position: absolute;
-  top: -25px;
-  /* Position above the button */
+  top: -25px; /* Position above the button */
   left: 50%;
   transform: translateX(-50%);
 }
@@ -430,36 +354,19 @@ h3 {
 .phone-only {
   display: none;
 }
-
 .phone-only .color-options.interior {
   flex-wrap: nowrap !important;
   overflow-x: auto;
   overflow-y: hidden;
-  justify-content: space-evenly;
+  justify-content: center;
   -webkit-overflow-scrolling: touch;
-}
-
-.selected-phone {
-  display: block;
-  padding-left: 10px;
-}
-
-.selected-phone:first-letter {
-  text-transform: uppercase;
 }
 
 @media (max-width: 768px) {
   .phone-only {
     display: block;
   }
-
-  .color-options {
-    display: flex;
-    justify-content: space-around;
-  }
-  
 }
-
 @media (min-width: 769px) {
   .phone-only {
     display: none !important;
@@ -467,47 +374,43 @@ h3 {
 }
 
 /* Basic Styling for the Container */
-
+/* 
 .configuratormobile {
   display: flex;
   flex-direction: column;
+
   font-family: Arial, sans-serif;
   width: 100%;
-  height: 30vh; 
-  justify-content: flex-end;
+  height: 40vh; 
 } 
-
+*/
 
 .phone-only .page1,
 .phone-only .page2,
 .phone-only .page3,
 .phone-only .page4 {
-  /* overflow-y: scroll; */
+  overflow-y: scroll;
   padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #fff;
-  /* White background for the pages */
-  border-radius: 8px;
-  /* Rounded corners for the pages */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  /* Shadow to make the pages stand out */
+  background-color: #fff; /* White background for the pages */
+  border-radius: 8px; /* Rounded corners for the pages */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow to make the pages stand out */
 }
 
 /* First Row: Heading */
 .heading {
-  display: flex;
   text-align: center;
   padding: 0.5rem;
   font-size: 1rem;
+  font-weight: bold;
   border-bottom: 1px solid #ddd;
 }
 
 /* Second Row: Options */
 .options {
-  flex: 1;
-  /* Takes up all remaining space */
+  flex: 1; /* Takes up all remaining space */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -534,17 +437,14 @@ h3 {
 /* Individual Navigation Items */
 .nav-item {
   flex: 1;
-  display: flex;
-  /* Enable flexbox for centering */
-  flex-direction: column;
-  /* Stack the symbol and text vertically */
+  display: flex; /* Enable flexbox for centering */
+  flex-direction: column; /* Stack the symbol and text vertically */
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 0.5rem;
   font-size: 0.9rem;
-  font-weight: bold;
-  /* Make both symbol and text bold */
+  font-weight: bold; /* Make both symbol and text bold */
 }
 
 /* Left Navigation */
@@ -579,57 +479,41 @@ h3 {
   padding-top: 1rem;
   margin: 10px !important;
   margin-top: 20px;
-  justify-content: space-evenly;
   /* flex-grow: 1; Allows this element to take up remaining space */
-  flex-shrink: 0;
-  /* Prevents the element from shrinking if the space is tight */
-  flex-basis: 0;
-  /* Ensures the element starts with zero width before growing */
+  flex-shrink: 0; /* Prevents the element from shrinking if the space is tight */
+  flex-basis: 0; /* Ensures the element starts with zero width before growing */
 }
 
 .scrollable-options {
-  /* overflow-x: auto !important; */
-  /* flex-wrap: nowrap !important; */
+  overflow-x: auto !important;
+  flex-wrap: nowrap !important;
 }
-
 .scrollable-options-grill {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  /* block-level container */
-  overflow-x: auto;
-  /* Allow horizontal scrolling */
-  white-space: nowrap;
-  /* Prevent items from wrapping */
+  display: block; /* block-level container */
+  overflow-x: auto; /* Allow horizontal scrolling */
+  white-space: nowrap; /* Prevent items from wrapping */
   -webkit-overflow-scrolling: touch;
-  padding-top: 16px;
-  /* padding-bottom: 10px; */
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .configurator.non-phone {
   align-items: center !important;
 }
-
 .configurator.non-phone .centered-content {
   display: flex;
-  flex-direction: column;
-  /* Vertical stacking */
-  justify-content: center;
-  /* Vertically centered */
-  align-items: stretch;
-  /* Horizontally stretched */
-  gap: 10px;
-  /* Add spacing between items */
-  height: 100%;
-  /* Ensure full height of parent */
+  flex-direction: column; /* Vertical stacking */
+  justify-content: center; /* Vertically centered */
+  align-items: stretch; /* Horizontally stretched */
+  gap: 10px; /* Add spacing between items */
+  height: 100%; /* Ensure full height of parent */
 }
 
-.configurator.non-phone .centered-content>div {
+.configurator.non-phone .centered-content > div {
   display: flex;
   justify-content: space-between;
   /* remove the above line to make it look like before  */
-  width: 100%;
-  /* Ensure each section spans full width */
+  width: 100%; /* Ensure each section spans full width */
 }
 
 .configurator.non-phone .centered-content .grille-options {
@@ -641,22 +525,19 @@ h3 {
 }
 
 .spacer {
-  height: 0px;
-  /* Default height */
+  height: 0px; /* Default height */
 }
 
 /* Spacer height for laptop-sized screens */
 @media (min-width: 1024px) {
   .spacer {
-    height: 2vh;
-    /* Larger height for laptops */
+    height: 2vh; /* Larger height for laptops */
   }
 }
 
 /* Optional: Spacer height for smaller devices */
 @media (max-width: 768px) {
   .spacer {
-    height: 0px;
-    /* Smaller height for mobile devices */
+    height: 0px; /* Smaller height for mobile devices */
   }
 }
