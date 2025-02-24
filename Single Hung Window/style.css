@@ -5,7 +5,6 @@ body {
 }
 
 /* Container styling for layout */
-
 .container {
   display: flex;
   width: 100%; /* Full width of the screen */

@@ -3,11 +3,9 @@
   margin: 0;
   padding: 0;
 }
-
 .debug {
   display: none !important;
 }
-
 body {
   font-family: "Roboto", sans-serif;
   display: flex;
@@ -23,9 +21,12 @@ body {
   width: 100%;
   /* max-width: 1200px; */
   height: 100vh;
-
+  border: 1px solid #ddd;
+  border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 h3 {
@@ -116,20 +117,20 @@ h3 {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: black;
+  background-color: lightgreen;
   border: 2px solid #fff;
   cursor: pointer;
 }
 
 .slider::-webkit-slider-thumb:hover {
-  background-color: rgb(78, 78, 78);
+  background-color: green;
 }
 
 .slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: black;
+  background-color: lightgreen;
   border: 2px solid #fff;
   cursor: pointer;
 }
@@ -137,7 +138,7 @@ h3 {
 .color-options {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center items */
+  justify-content: start; /* Center items */
   gap: 10px;
   margin: 0px 0;
 }
@@ -488,9 +489,9 @@ h3 {
   flex-wrap: nowrap !important;
 }
 .scrollable-options-grill {
-  display: flex; /* block-level container */
-  flex-wrap: wrap;
-  justify-content: center;
+  display: block; /* block-level container */
+  overflow-x: auto; /* Allow horizontal scrolling */
+  white-space: nowrap; /* Prevent items from wrapping */
   -webkit-overflow-scrolling: touch;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -539,10 +540,4 @@ h3 {
   .spacer {
     height: 0px; /* Smaller height for mobile devices */
   }
-}
-
-
-.modal-title{
-  padding-bottom: 30px;
-  font-size: 28px;
 }

@@ -18,7 +18,6 @@ let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
 const sliderItemId = 304;
-const zoomOut=0.6;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -290,12 +289,10 @@ function onModelLoaded(api) {
   console.log(`Device is ${deviceType()}`);
   logAllParts(api);
   getSliderWorldCoordinates(api);
-
-  hideAllGrills();  
+  hideAllGrills();
   // Show the default grill (Traditional, for instance)
   showGrillType("traditional");
   logAllMaterials(api);
-
   if (deviceType() == "tablet") {
     console.log("Setting tab to tab interior");
     api.setCameraLookAt(
@@ -471,16 +468,6 @@ function interiorColorSelectHandler(event) {
 
   interiorColor = selectedColor;
 
-  // Capitalize the first letter of the selected color
-  const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
-  
-  document.querySelector(".interior-selected-color").textContent = capitalizedColor;
-  const colorValue = event.target.getAttribute("data-value");
-  document.querySelectorAll(".interior-selected-color").forEach((element) => {
-    element.textContent = capitalizedColor;
-    element.style.color =colorValue
-  });
- 
   // Remove the 'selected' class from all color buttons
   document.querySelectorAll(".interior-color").forEach((button) => {
     button.classList.remove("selected");
@@ -632,18 +619,6 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
 function exteriorColorSelectHandler(event) {
   focusExterior();
   const selectedColor = event.target.getAttribute("data-color");
-  exteriorColor = selectedColor;
-  const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
-  document.querySelectorAll(".exterior-selected-color").forEach((element) => {
-    element.textContent = capitalizedColor;
-  
-    // Get the data-value attribute and set it as the color
-    const colorValue = event.target.getAttribute("data-value");
-    element.style.color = colorValue;
-  });
-
-  
-
   console.log(`Selected color : ${selectedColor}`);
   document.querySelectorAll(".exterior-color").forEach((button) => {
     button.classList.remove("selected");
@@ -722,18 +697,6 @@ document.querySelectorAll(".lock-button, .hardware-color").forEach((button) => {
   button.addEventListener("click", (event) => {
     const selectedColor = event.target.getAttribute("data-color");
     const hex = event.target.getAttribute("hex");
-
-    const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
-  
-    document.querySelectorAll(".hardware-selected-color").forEach((element) => {
-      element.textContent = capitalizedColor;
-    
-      if (hex === "#f0eeef") {
-        element.style.color = "#d4d4d4";
-      } else {
-        element.style.color = hex;
-      }
-    });
     document.querySelectorAll(".hardware-color").forEach((button) => {
       button.classList.remove("selected");
     });
@@ -1043,12 +1006,6 @@ document.querySelectorAll(".grille-option").forEach((option) => {
   option.addEventListener("click", (event) => {
     // Get the value of the data-pattern attribute
     const pattern = option.getAttribute("data-pattern");
-    console.log(pattern)
-    const capitalizedColor = pattern.charAt(0).toUpperCase() + pattern.slice(1);
-  
-    document.querySelectorAll(".grille-selected-color").forEach((element) => {
-      element.textContent = capitalizedColor;
-    });
     showGrillType(pattern);
 
     // Remove the 'selected' class from all options
@@ -1066,7 +1023,6 @@ document.querySelectorAll(".grille-option").forEach((option) => {
 
 document.querySelectorAll(".nav-item.center").forEach((element) => {
   element.addEventListener("click", (event) => {
-    
     const selectedColor = "white";
     const extColor = "black";
     console.log(`Selected color : ${selectedColor}`);
@@ -1163,18 +1119,11 @@ function isNearPosition(currentPos, targetPos, threshold = 0.05) {
 function focusExterior() {
   // Get the current device type (laptop or tablet)
   const device = deviceType(); // Returns either 'laptop' or 'tablet'
-  
+
   // Get the camera settings for the current device
   const exterior = cameraSettings[device].exterior;
   const interior = cameraSettings[device].interior;
   const intermediate = cameraSettings[device].intermediate;
-
-  // Adjust the camera position to be closer for a larger view
-  const closerExteriorPosition = [
-    exterior.position[0] * zoomOut, // Adjust X position
-    exterior.position[1] * zoomOut, // Adjust Y position
-    exterior.position[2] * zoomOut  // Adjust Z position
-  ];
 
   // Get the current camera position and target
   api.getCameraLookAt(function (err, camera) {
@@ -1191,9 +1140,9 @@ function focusExterior() {
         "Dest:Exterior Initial:Near Interior Path:Intermediate needed"
       );
       setCamera(intermediate.position, intermediate.target, 1);
-      setTimeout(() => setCamera(closerExteriorPosition, exterior.target, 1), 700);
+      setTimeout(delayedExterior, 700);
     } else {
-      setCamera(closerExteriorPosition, exterior.target, 2);
+      setCamera(exterior.position, exterior.target, 2);
     }
   });
 }
@@ -1212,13 +1161,6 @@ function focusInterior() {
   const exterior = cameraSettings[device].exterior;
   const intermediate = cameraSettings[device].intermediate;
 
-  // Adjust the camera position to be closer for a larger view
-  const closerInteriorPosition = [
-    interior.position[0] * zoomOut, // Adjust X position
-    interior.position[1] * zoomOut, // Adjust Y position
-    interior.position[2] * zoomOut  // Adjust Z position
-  ];
-
   // Get the current camera position and target
   api.getCameraLookAt(function (err, camera) {
     if (err) {
@@ -1234,9 +1176,9 @@ function focusInterior() {
         "Dest:Interior Initial:Near Exterior Path:Intermediate needed"
       );
       setCamera(intermediate.position, intermediate.target, 1);
-      setTimeout(() => setCamera(closerInteriorPosition, interior.target, 1), 700);
+      setTimeout(delayedInterior, 700);
     } else {
-      setCamera(closerInteriorPosition, interior.target, 2);
+      setCamera(interior.position, interior.target, 2);
     }
   });
 }
