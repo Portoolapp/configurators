@@ -1,14 +1,12 @@
 // Initialize Sketchfab Viewer
 const iframe = document.getElementById("api-frame");
-// const uid = "1db33543f4b54ca995c7babeb3949ba2"; // Replace with your model's UID
-// const uid = "69f0e676e3344e47afab5dd55ff3ae0f"; // uid of double hung with animations
-const uid = "82888e4ada70422189731a70489705bb";
+const uid = "fad0f5c31798432299874ef814606886"; // Replace with your model's UID
+
 let api;
 const version = "1.12.1";
 let base = {};
 let _nodes;
-let baseSash1 = [];
-let baseSash2 = [];
+let baseSash = [];
 let baseLock1 = [];
 let baseLock2 = [];
 let baseLocks = {};
@@ -19,13 +17,8 @@ let interiorColor = "white";
 let exteriorColor = "black";
 let handleColor = undefined;
 let myMaterials = [];
-const sliderItemId = 1224;
-const secondaryItemId = 610;
-// Global constants for node IDs
-const LOWER_SASH = 610;
-const UPPER_SASH = 1224;
-const slider1 = 37;
-const slider2 = 270;
+const sliderItemId = 304;
+const zoomOut = 0.6;
 /*!SECTION
 
 (3) [-2.7174170659391397, -0.05261466489717182, 2.0827442408772687]
@@ -37,387 +30,62 @@ VM3712:2 (3) [0.00984113250497559, 2.79028723950023, 1.7007123991535738]
 VM3712:3 (3) [0.00003166594505310538, 0.017710406076908443, 1.5019633000373842]
 */
 
-const tiltAnimation = {
-  lower_initial: {
-    local: [
-      1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.6009600162506104,
-      1.1506500244140625, -2.038909912109375, 1,
-    ],
-    world: {
-      0: 0.01,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 2.22045e-18,
-      6: 0.01,
-      7: 0,
-      8: 0,
-      9: -0.01,
-      10: 2.22045e-18,
-      11: 0,
-      12: 0.016009600162506105,
-      13: 0.020389099121093754,
-      14: 0.01150650024414062,
-      15: 1,
-    },
-  },
-  upper_initial: {
-    local: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.60096, 29.693, -0.601931, 1],
-    world: {
-      0: 0.01,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 2.22045e-18,
-      6: 0.01,
-      7: 0,
-      8: 0,
-      9: -0.01,
-      10: 2.22045e-18,
-      11: 0,
-      12: 0.0160096,
-      13: 0.006019310000000066,
-      14: 0.29693,
-      15: 1,
-    },
-  },
-  lower_stand: {
-    local: [
-      1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.6009600162506104, 9.27027416229248,
-      -2.0389089584350586, 1,
-    ],
-    world: {
-      0: 0.01,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 2.22045e-18,
-      6: 0.01,
-      7: 0,
-      8: 0,
-      9: -0.01,
-      10: 2.22045e-18,
-      11: 0,
-      12: 0.016009600162506105,
-      13: 0.02038908958435061,
-      14: 0.0927027416229248,
-      15: 1,
-    },
-  },
-  lower_tilt: {
-    local: [
-      0.999999943298375, 0.00017086511934888892, -0.000290186770078846, 0,
-      -0.00017086510629481114, -0.4851138217438041, -0.8744510564268152, 0,
-      -0.00029018677776522826, 0.8744510564268128, -0.48511376504217907, 0,
-      1.60096, 9.33767, -2.03891, 1,
-    ],
-    world: {
-      0: 0.00999999943298375,
-      1: 0.0000029018677007884605,
-      2: 0.0000017086511934888887,
-      3: 0,
-      4: -0.0000017086510629481115,
-      5: 0.00874451056426815,
-      6: -0.004851138217438043,
-      7: 0,
-      8: -0.0000029018677776522827,
-      9: 0.004851137650421792,
-      10: 0.008744510564268126,
-      11: 0,
-      12: 0.0160096,
-      13: 0.02038910000000002,
-      14: 0.09337669999999999,
-      15: 1,
-    },
-  },
-  upper_sit: {
-    local: [
-      1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.6009600162506104,
-      21.309356689453125, -0.6019319891929626, 1,
-    ],
-    world: {
-      0: 0.01,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 2.22045e-18,
-      6: 0.01,
-      7: 0,
-      8: 0,
-      9: -0.01,
-      10: 2.22045e-18,
-      11: 0,
-      12: 0.016009600162506105,
-      13: 0.006019319891929675,
-      14: 0.21309356689453127,
-      15: 1,
-    },
-  },
-  upper_tilt: {
-    local: [
-      0.9999999431932516, 0.00017056548196862779, -0.0002907248039058446, 0,
-      -0.00017056548178429195, -0.48786750325978606, -0.8729177026379489, 0,
-      -0.00029072480401399266, 0.8729177026379489, -0.4878674464530377, 0,
-      1.6009639501571655, 21.239795684814453, -0.6019319891929626, 1,
-    ],
-    world: {
-      0: 0.009999999431932517,
-      1: 0.0000029072480390584463,
-      2: 0.0000017056548196862773,
-      3: 0,
-      4: -0.0000017056548178429195,
-      5: 0.008729177026379487,
-      6: -0.004878675032597863,
-      7: 0,
-      8: -0.0000029072480401399265,
-      9: 0.004878674464530379,
-      10: 0.008729177026379487,
-      11: 0,
-      12: 0.016009639501571655,
-      13: 0.006019319891929674,
-      14: 0.21239795684814453,
-      15: 1,
-    },
-  },
-};
-
-// Function to linearly interpolate between current and destination matrices
-function interpolateMatrix(api, nodeId, destinationMatrix, duration, callback) {
-  api.getMatrix(nodeId, function (err, matrixObj) {
-    if (err) {
-      console.error("Error fetching current matrix:", err);
-      return;
-    }
-
-    // Extract the `local` matrix
-    const currentMatrix = matrixObj.local;
-
-    // Validate the matrix structure
-    if (!currentMatrix || currentMatrix.length !== 16) {
-      console.error("Invalid matrix structure:", currentMatrix);
-      return;
-    }
-
-    const steps = Math.ceil(duration / 16); // ~60 FPS
-    const stepDelta = Array(16)
-      .fill(0)
-      .map((_, i) => (destinationMatrix[i] - currentMatrix[i]) / steps);
-
-    let step = 0;
-
-    function animate() {
-      if (step >= steps) {
-        // Finalize by setting the exact destination matrix
-        api.setMatrix(nodeId, destinationMatrix, function (err) {
-          if (err) {
-            console.error("Error setting matrix:", err);
-          } else if (callback) {
-            callback();
-          }
-        });
-        return;
-      }
-
-      // Compute the intermediate matrix
-      const intermediateMatrix = currentMatrix.map(
-        (val, i) => val + step * stepDelta[i]
-      );
-
-      // Set the intermediate matrix
-      api.setMatrix(nodeId, intermediateMatrix, function (err) {
-        if (err) {
-          console.error("Error setting matrix during animation:", err);
-        }
-      });
-
-      step++;
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-  });
-}
-function setMatrix(id, matrix) {
-  console.log("Matrix before:");
-  getMatrix(id);
-  api.setMatrix(id, matrix.local, function (err) {
-    if (!err) {
-      window.console.log("Matrix set");
-      console.log("Matrix after:");
-      getMatrix(id);
-    }
-  });
-}
-// Function to play the tilt animation sequence
-function playTiltAnimation(api) {
-  // Animate lower sash to "lower_stand" then to "lower_tilt"
-  interpolateMatrix(
-    api,
-    LOWER_SASH,
-    tiltAnimation.lower_stand,
-    500,
-    function () {
-      interpolateMatrix(
-        api,
-        LOWER_SASH,
-        tiltAnimation.lower_tilt,
-        500,
-        function () {
-          // After lower sash animation, animate upper sash to "upper_sit" then to "upper_tilt"
-          interpolateMatrix(
-            api,
-            UPPER_SASH,
-            tiltAnimation.upper_sit,
-            500,
-            function () {
-              interpolateMatrix(
-                api,
-                UPPER_SASH,
-                tiltAnimation.upper_tilt,
-                500,
-                function () {
-                  console.log("Tilt animation completed.");
-                }
-              );
-            }
-          );
-        }
-      );
-    }
-  );
-}
-
-function rotateNodeX(nodeId, duration = 1.0) {
-  // Convert -120 degrees to radians
-  const radAngle = (120 * Math.PI) / 180;
-
-  // Define rotation parameters
-  const rotateTo = [radAngle, 1, 0, 0]; // Rotate around the X-axis
-  const options = {
-    duration: duration, // Animation duration in seconds
-    easing: "easeOutQuad", // Smooth easing
-  };
-
-  // Call the Sketchfab rotate API
-  api.rotate(nodeId, rotateTo, options, function (err, rotateTo) {
-    if (!err) {
-      console.log(`Node ${nodeId} rotated successfully to`, rotateTo);
-    } else {
-      console.error(`Error rotating node ${nodeId}:`, err);
-    }
-  });
-}
-
-const rotationSlider = document.getElementById("rotationSlider");
-function updateRotation(value) {
-  // Convert the slider value to radians, scaling it between 0 and PI
-  const radAngle = value * Math.PI;
-
-  // The axis of rotation: here we assume you want to rotate around the X axis.
-  const axisX = 1;
-  const axisY = 0;
-  const axisZ = 0;
-
-  // Call the rotate function from the API
-  api.rotate(
-    LOWER_SASH,
-    [radAngle, axisX, axisY, axisZ],
-    {
-      duration: 0.5, // Set the duration of the rotation animation (in seconds)
-      easing: "easeOutQuad", // You can choose any easing method
-    },
-    function (err, rotateTo) {
-      if (!err) {
-        console.log("Object has been rotated according to", rotateTo);
-        console.log(
-          "Object has been rotated to this value of the slider : ",
-          value
-        );
-      } else {
-        console.error("Error rotating the object:", err);
-      }
-    }
-  );
-}
-// for the rotation slider
-rotationSlider.addEventListener("input", function (event) {
-  const value = parseFloat(event.target.value);
-  updateRotation(value);
-});
 const cameraSettings = {
   laptop: {
     interior: {
-      position: [0.07293992496851537, -2.4738738450816036, 0.7735439458435225],
-      target: [0.030520262780313376, -0.04339921944218825, 0.5866693227452184],
+      position: [0.21293992496851537, -1.138738450816036, 0.3535439458435225],
+      target: [0.17749937616082234, 0.02174988872000365, 0.3074988338632685],
+    },
+    intermediate: {
+      position: [-1.3537542778272345, -0.61055808028151832, 0.0902761359143873],
+      target: [0.17749937616082234, 0.02174988872000365, 0.3074988338632685],
+    },
+    exterior: {
+      position: [0.192030785195712795, 1.1773109324582653, 0.3260634451459333],
+      target: [0.17749937616082234, 0.02174988872000365, 0.3074988338632685],
+    },
+  },
+  tablet: {
+    interior: {
+      position: [0.202030785195712795, -1.246484646947164, 0.30163477636609553],
+      target: [
+        0.17749937616082234, 0.02174988872000365, 0.3074988338632685,
+      ],
     },
     intermediate: {
       position: [-2.3537542778272345, 0.031055808028151832, 1.0902761359143873],
-      target: [0.030520262780313376, -0.04339921944218825, 0.5866693227452184],
-    },
-    exterior: {
-      position: [0.012030785195712795, 2.3773109324582653, 0.8760634451459333],
-      target: [0.030520262780313376, -0.04339921944218825, 0.5866693227452184],
-    },
-  },
-
-  tablet: {
-    interior: {
-      position: [-0.015868213272777293, -3.246484646947164, 1.0163477636609553],
       target: [
-        -0.0045842219754267536, 0.0075103268176937655, 0.6153091209981855,
-      ],
-    },
-    intermediate: {
-      position: [-3.2382630184152035, 0.06125908344163162, 1.1537096440964913],
-      target: [
-        -0.0045842219754267536, 0.0075103268176937655, 0.6153091209981855,
+        0.17749937616082234, 0.02174988872000365, 0.3074988338632685,
       ],
     },
     exterior: {
-      position: [0.11247729526095579, 3.2837711391375297, 0.5722475198315641],
+      position: [0.212030785195712795, 1.3773109324582653, 0.277606344514593],
       target: [
-        -0.0045842219754267536, 0.0075103268176937655, 0.6153091209981855,
+        0.17749937616082234, 0.02174988872000365, 0.3074988338632685,
       ],
     },
   },
   phone: {
     interior: {
-      position: [-0.016868115494094227, -2.148275459116784, 1.0269600789535196],
+      position: [0.1568213272777293, -1.34484646947164, 0.32636609553],
       target: [
-        -0.000005441286417638837, 0.015930801518594648, 0.5345934765860052,
+        0.17749937616082234, 0.02174988872000365, 0.3074988338632685,
       ],
     },
     intermediate: {
       position: [-2.1997344205780345, 0.024289219006150442, 0.8306011014937053],
       target: [
-        -0.000005441286417638837, 0.015930801518594648, 0.5345934765860052,
+        0.17749937616082234, 0.02174988872000365, 0.3074988338632685,
       ],
     },
     exterior: {
-      position: [-0.03193887696818398, 2.2324168412785936, 0.6471450235159705],
+      position: [0.2193887696818398, 1.4324168412785936, 0.3450235159705],
       target: [
-        -0.000005441286417638837, 0.015930801518594648, 0.5345934765860052,
+        0.17749937616082234, 0.02174988872000365, 0.3074988338632685,
       ],
     },
   },
 };
-
-let interiorCameraPos = [
-  0.9080488874565105, -3.366425992671914, 2.148017341436057,
-];
-let interiorCameraTarget = [
-  0.9080488874564873, 0.058943422061014494, 1.0350473517155412,
-];
-let exteriorCameraPos = [
-  1.003572766898403, 3.5336761869366797, 1.9778968765932783,
-];
-let exteriorCameraTarget = [
-  0.9080488874564873, 0.058943422061014494, 1.0350473517155412,
-];
 
 const materialChannels = {
   AOPBR: { type: "number", min: 0, max: 1, step: 0.01 },
@@ -466,7 +134,7 @@ navigateTo("page1");
 
 document
   .querySelector(".page1 .nav-item.left")
-  .addEventListener("click", () => navigateTo("page3")); // Going left from page1 to page4
+  .addEventListener("click", () => navigateTo("page4")); // Going left from page1 to page4
 
 document
   .querySelector(".page1 .nav-item.right")
@@ -488,27 +156,37 @@ document
 
 document
   .querySelector(".page3 .nav-item.right")
-  .addEventListener("click", () => navigateTo("page1")); // Going right from page3 to page4
+  .addEventListener("click", () => navigateTo("page4")); // Going right from page3 to page4
+
+// Page 4: Grille Pattern navigation
+document
+  .querySelector(".page4 .nav-item.left")
+  .addEventListener("click", () => navigateTo("page3")); // Going left from page4 to page3
+
+document
+  .querySelector(".page4 .nav-item.right")
+  .addEventListener("click", () => navigateTo("page1")); // Going right from page4 to page1
 
 const interiorColors = {
   white: "#f3f4f5",
   black: "#000000",
-  // beige: "#b59d73", // Added Beige
-  beige: "#816f51", // Added Beige
-  bronze: "#282725", // Added Bronze
+  brown: "#4b453e", // Added brown
+  tan: "#c4b296", // Added tan
+  morningskygray: "#c2bebb", // Added morning sky gray
 };
 const exteriorColors = {
   white: "#f3f4f5",
-  black: "#16151c",
-  // beige: "#b59d73", // Added Beige
-  beige: "#816f51", // Added Beige
-  bronze: "#282725",
+  black: "#000000",
+  brown: "#4b453e", // Added brown
+  tan: "#c4b296", // Added tan
+  morningkkygray: "#c2bebb", // Added morning sky gray
 };
 const colorCombinations = {
-  white: ["black", "bronze", "white"], // White interior can have Black or Bronze exterior
+  white: ["black", "brown", "tan", "morningskygray"], // White interior can have Black or Bronze exterior
   black: ["black"], // Black interior can only have Black exterior
-  bronze: ["bronze"], // Bronze interior can only have Bronze exterior
-  beige: ["beige"], // Beige interior can only have Beige exterior
+  brown: ["brown"], // Brown interior can only have Brown exterior
+  tan: ["tan"], // Tan interior can only have Tan exterior
+  morningskygray: ["morningskygray"], // mMrningskygray interior can only have mMrningskygray exterior
 };
 
 function hexToRgbArray(hex) {
@@ -529,28 +207,30 @@ function hexToRgbArray(hex) {
 
 function setColor(materialName, hexcode) {
   var materialToChange;
+  console.log("length", myMaterials.length, myMaterials);
   for (var i = 0; i < myMaterials.length; i++) {
     var m = myMaterials[i];
     if (m.name == materialName) {
+      console.log("Checking for match: " +  materialName);
       materialToChange = m;
-      console.log(`Material to Change has been found`);
     }
   }
+  console.log("Material to Change: " + materialToChange);
   materialToChange.channels.AlbedoPBR.factor = 1;
   materialToChange.channels.AlbedoPBR.enable = true;
   materialToChange.channels.AlbedoPBR.color = hexToRgbArray(hexcode);
 
   // materialToChange.channels.DiffuseColor.factor = 1;
   // materialToChange.channels.DiffuseColor.color = hexToRgbArray(hexcode);
-  console.log("Final material:" + materialName);
-  console.log(materialToChange);
+  // console.log("Final material:" + materialToChange);
   api.setMaterial(materialToChange);
 }
 
 const grillTypes = {
-  prairie: [992, 1582],
-  traditional: [1129, 1719],
+  prairie: [998, 1574],
+  traditional: [1135, 1711],
 };
+
 const handleID = 412;
 
 function onSuccess(apiInstance) {
@@ -565,7 +245,6 @@ function onSuccess(apiInstance) {
 function onError() {
   console.log("Viewer error");
 }
-
 // Initialize the Sketchfab viewer
 client.init(uid, {
   success: onSuccess,
@@ -612,11 +291,14 @@ function onModelLoaded(api) {
   console.log("Model has been loaded");
   console.log(`Device is ${deviceType()}`);
   logAllParts(api);
-  getSlidersWorldCoordinates(api);
+  getSliderWorldCoordinates(api);
+  //  Get the animation
+
   hideAllGrills();
   // Show the default grill (Traditional, for instance)
   showGrillType("traditional");
   logAllMaterials(api);
+
   if (deviceType() == "tablet") {
     console.log("Setting tab to tab interior");
     api.setCameraLookAt(
@@ -634,99 +316,10 @@ function onModelLoaded(api) {
   }
   setTimeout(initialInteriorAndExterior, 2000);
   initializeMaterialEditor();
-
-  //animation stuff
-  setCycleToOne(api);
-
-  printAnimation(api);
 }
 
-function setCycleToOne(api) {
-  api.setCycleMode("one", function (err) {
-    if (!err) {
-      window.console.log("Animation : Set animation cycle mode");
-      // setStaticPose(api);
-    }
-  });
-}
-function setStaticPose(api) {
-  api.pause(function (err) {
-    if (!err) {
-      api.seekTo(0, function (seekErr) {
-        if (!seekErr) {
-          console.log("Animation : Model reset to static pose");
-        } else {
-          console.error("Animation : Error seeking to time 0:", seekErr);
-        }
-      });
-    } else {
-      console.error("Animation : Error pausing animation:", err);
-    }
-  });
-}
-function printAnimation(api) {
-  api.getAnimations(function (err, animations) {
-    if (!err) {
-      console.log("Available Animations:");
-      animations.forEach(([uid, name, duration], index) => {
-        console.log(`Animation ${index + 1}:`);
-        console.log(`UID: ${uid}`);
-        console.log(`Name: ${name}`);
-        console.log(`Duration: ${duration.toFixed(2)} seconds`);
-      });
-    } else {
-      console.error("Animation : Error fetching animations:", err);
-    }
-  });
-}
-
-// Function to play animation by UID
-function playAnimationByUID(api, uid) {
-  api.setCurrentAnimationByUID(uid, function (err) {
-    if (!err) {
-      api.play(function (err) {
-        if (!err) {
-          console.log(`Animation with UID: ${uid} is playing.`);
-        } else {
-          console.error(`Error playing animation with UID: ${uid}`, err);
-        }
-      });
-    } else {
-      console.error(`Error setting animation with UID: ${uid}`, err);
-    }
-  });
-}
-
-function getMatrix(nodeId) {
-  api.getMatrix(nodeId, function (err, matrix) {
-    if (!err) {
-      window.console.log("Matrix:");
-      window.console.log(matrix);
-    }
-  });
-}
-
-// Function to play animation by Name
-function playAnimationByName(api, name) {
-  api.getAnimations(function (err, animations) {
-    if (!err) {
-      const animation = animations.find(
-        (anim) => anim[1].toLowerCase() === name.toLowerCase()
-      );
-      if (animation) {
-        playAnimationByUID(api, animation[0]); // Call playAnimationByUID using the found UID
-      } else {
-        console.error(`Animation with name "${name}" not found.`);
-      }
-    } else {
-      console.error("Error fetching animations:", err);
-    }
-  });
-}
-
-function getSlidersWorldCoordinates(api) {
+function getSliderWorldCoordinates(api) {
   const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
-
   // Get the world matrix of the node
   api.getMatrix(nodeInstanceID, function (err, matrix) {
     if (!err) {
@@ -736,27 +329,31 @@ function getSlidersWorldCoordinates(api) {
       const z = matrix.world[14]; // Z coordinate
 
       // Store them in the baseSash array
-      baseSash2 = [x, y, z];
+      baseSash = [x, y, z];
 
-      console.log("Slider World Coordinates: ", baseSash2);
+      console.log("Slider World Coordinates: ", baseSash);
     } else {
-      console.error("Error getting matrix for instance ID 217:", err);
+      // console.error("Error getting matrix for instance ID 217:", err);
     }
   });
-  api.getMatrix(secondaryItemId, function (err, matrix) {
-    if (!err) {
-      // Extract the X, Y, Z coordinates from the world matrix
-      const x = matrix.world[12]; // X coordinate
-      const y = matrix.world[13]; // Y coordinate
-      const z = matrix.world[14]; // Z coordinate
 
-      // Store them in the baseSecondary array
-      baseSash1 = [x, y, z];
+  // also get the handles base values
+  locksId.forEach((id) => {
+    api.getMatrix(id, function (err, matrix) {
+      if (!err) {
+        // Extract the X, Y, Z coordinates from the world matrix
+        const x = matrix.world[12]; // X coordinate
+        const y = matrix.world[13]; // Y coordinate
+        const z = matrix.world[14]; // Z coordinate
 
-      console.log("Secondary World Coordinates: ", baseSash1);
-    } else {
-      console.error("Error getting matrix for instance ID 217:", err);
-    }
+        // Store them in the baseLocks object with the ID as the key
+        baseLocks[id] = [x, y, z];
+
+        console.log(`Lock World Coordinates for ID ${id}:`, baseLocks[id]);
+      } else {
+        console.error(`Error getting matrix for instance ID ${id}:`, err);
+      }
+    });
   });
 }
 
@@ -803,91 +400,75 @@ function hideAllGrills() {
   });
 }
 
-// Handle Slider Input (Door Slider)
-function sliderHandler(event) {
-  const element = event.target;
-  const value = parseFloat(element.value);
-  const multiplier = 1; // if small values are not moving the parts
-
-  // const zOffset = -0.03;
-  const zOffset = -0;
-  // Directly use the instance ID for the primary slider node
-  const nodeInstanceID = sliderItemId; // The instance ID for the primary slider
-
-  console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
-
-  // Translate the primary slider
-  const newPosition = [
-    baseSash1[0],
-    baseSash1[1] + value * multiplier,
-    baseSash1[2] + zOffset,
-  ];
-  api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
-    if (!err) {
-      console.log("Object has been translated to", translateTo);
-    } else {
-      console.error("Translation failed:", err);
-    }
+// Open Upper & Lower Window
+function openAnimation(api) {
+  var speed = 0.5;
+  api.setCycleMode('one', function () {
+    api.setSpeed(speed, function (err) {
+      api.play();
+    });
   });
 }
 
-function secondarySliderHandler(event) {
-  const element = event.target;
-  const value = parseFloat(element.value);
-  const multiplier = 1; // if small values are not moving the parts
-
-  // const zOffset = -0.03;
-  const zOffset = -0;
-  // Directly use the instance ID for the primary slider node
-  const nodeInstanceID = secondaryItemId; // The instance ID for the primary slider
-
-  console.log(`Slider value: ${value}, Node: ${nodeInstanceID}`);
-
-  // Translate the primary slider
-  const newPosition = [
-    baseSash2[0],
-    baseSash2[1] + value * multiplier,
-    baseSash2[2] + zOffset,
-  ];
-  api.translate(nodeInstanceID, newPosition, {}, function (err, translateTo) {
-    if (!err) {
-      console.log("Object has been translated to", translateTo);
-    } else {
-      console.error("Translation failed:", err);
-    }
-  });
+// Handle toggle
+function toggleHandler() {
+  const toggleButton = document.getElementById("toggle-button");
+  let toggleFlag = toggleButton.getAttribute('toggle-flag');
+  if (toggleFlag == "0") {
+    document.getElementById("toggle-on").style.display = "none";
+    document.getElementById("toggle-off").style.display = "block";
+    openAnimation(api)
+    toggleFlag = "1";
+  } else {
+    api.getAnimations(function (err, animations) {
+      if (!err) {
+        if (animations && animations.length > 0) {
+          api.seekTo(0);
+          api.pause();
+        }
+      }
+    });
+    document.getElementById("toggle-on").style.display = "block";
+    document.getElementById("toggle-off").style.display = "none";
+    toggleFlag = "0";
+  }
+  toggleButton.setAttribute('toggle-flag', toggleFlag);
 }
 
-// Handle the primary slider (door slider)
-document
-  .getElementById("primarySlider")
-  .addEventListener("input", sliderHandler);
-
-document
-  .getElementById("secondarySlider")
-  .addEventListener("input", secondarySliderHandler);
+// Handle the toggle of the open & close
+document.getElementById('toggle-button').addEventListener('click', toggleHandler);
 
 document.querySelectorAll(".interior-color").forEach((element) => {
   element.addEventListener("click", interiorColorSelectHandler);
 });
 function initialInteriorAndExterior() {
-  console.log("Initial white interior button press");
   // Select the button with the class "interior-color" and data-color="white"
   const button = document.querySelector('.interior-color[data-color="white"]');
 
   // Simulate a click event on the button
   button.click();
 
-  setColor("Exterior", interiorColors["black"]);
+  // setColor("Exterior.002", interiorColors["black"]);
+  setColor("Interior.002", interiorColors["white"]);
 }
 
 function interiorColorSelectHandler(event) {
-  focusInterior();
+  focusExterior();
   console.log(`Button pressed : ${event.target}`);
   const selectedColor = event.target.getAttribute("data-color");
   console.log(`Selected color : ${selectedColor}`);
 
   interiorColor = selectedColor;
+
+  // Capitalize the first letter of the selected color
+  const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
+
+  document.querySelector(".interior-selected-color").textContent = capitalizedColor;
+  const colorValue = event.target.getAttribute("data-value");
+  document.querySelectorAll(".interior-selected-color").forEach((element) => {
+    element.textContent = capitalizedColor;
+    element.style.color = colorValue
+  });
 
   // Remove the 'selected' class from all color buttons
   document.querySelectorAll(".interior-color").forEach((button) => {
@@ -896,7 +477,7 @@ function interiorColorSelectHandler(event) {
 
   // Add the 'selected' class to the clicked color button
   event.target.classList.add("selected");
-  setColor("Interior", interiorColors[interiorColor]);
+  setColor("Interior.002", interiorColors[interiorColor]);
   // if (interiorColor === "white") {
   //   // showAllExteriorColors();
   //   console.log("No need to disable any Exterior colors");
@@ -1014,7 +595,7 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
         // If we haven't auto-selected yet, select the first valid color automatically
         if (!autoSelected) {
           circle.classList.add("selected");
-          setColor("Exterior", interiorColors[exteriorColor]);
+          setColor("Exterior.002", interiorColors[exteriorColor]);
           console.log(`Auto-selected exterior color: ${exteriorColor}`);
           autoSelected = true; // Set flag so we don't auto-select again
         } else {
@@ -1038,8 +619,20 @@ function updateExteriorColorOptionsv2(selectedInteriorColor) {
 }
 
 function exteriorColorSelectHandler(event) {
-  focusExterior();
+  focusInterior();
   const selectedColor = event.target.getAttribute("data-color");
+  exteriorColor = selectedColor;
+  const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
+  document.querySelectorAll(".exterior-selected-color").forEach((element) => {
+    element.textContent = capitalizedColor;
+
+    // Get the data-value attribute and set it as the color
+    const colorValue = event.target.getAttribute("data-value");
+    element.style.color = colorValue;
+  });
+
+
+
   console.log(`Selected color : ${selectedColor}`);
   document.querySelectorAll(".exterior-color").forEach((button) => {
     button.classList.remove("selected");
@@ -1048,7 +641,7 @@ function exteriorColorSelectHandler(event) {
   // Add the 'selected' class to the clicked color button
   event.target.classList.add("selected");
   exteriorColor = selectedColor;
-  setColor("Exterior", interiorColors[exteriorColor]);
+  setColor("Exterior.002", interiorColors[exteriorColor]);
 }
 
 // Function to update available exterior color options based on the selected interior colo
@@ -1081,14 +674,6 @@ function updateGrillButtonStyles(selectedGrill) {
 // Handle Lock (Handle) Color Selection
 // const lockButtons = document.querySelectorAll(".lock-button");
 
-// lockButtons.forEach((button) => {
-//   button.addEventListener("click", (e) => {
-//     const selectedLockColor = e.target.style.backgroundColor;
-//     console.log(`Lock (Handle) color selected: ${selectedLockColor}`);
-//     updateLockButtonStyles(e.target);
-//   });
-// });
-
 function logAllMaterials(api) {
   // Get the list of all materials in the scene
   api.getMaterialList(function (err, materials) {
@@ -1099,32 +684,37 @@ function logAllMaterials(api) {
 
     // Log each material's details
     myMaterials = materials;
+    console.log('myMaterials', myMaterials);
     materials.forEach((material, index) => {
       console.log(`Material ${index}:`, material);
     });
   });
 }
 
-// Update button styles when lock color is selected
-// function updateLockButtonStyles(selectedButton) {
-//   lockButtons.forEach((button) => {
-//     button.classList.remove("border-4", "border-blue-500");
-//   });
-//   selectedButton.classList.add("border-4", "border-blue-500");
-// }
-
 // Function to handle color selection and apply material customization
 document.querySelectorAll(".lock-button, .hardware-color").forEach((button) => {
   button.addEventListener("click", (event) => {
     const selectedColor = event.target.getAttribute("data-color");
     const hex = event.target.getAttribute("hex");
+
+    const capitalizedColor = selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1);
+    document.querySelectorAll(".hardware-selected-color").forEach((element) => {
+      element.textContent = capitalizedColor;
+
+      if (hex === "#f0eeef") {
+        element.style.color = "#d4d4d4";
+      } else {
+        element.style.color = hex;
+      }
+    });
+
     document.querySelectorAll(".hardware-color").forEach((button) => {
       button.classList.remove("selected");
     });
 
     // Add the 'selected' class to the clicked color button
     event.target.classList.add("selected");
-    focusInterior();
+    focusExterior();
     if (hex) {
       // If the element has a hex attribute, create a customColor object
       const customColor = {
@@ -1135,7 +725,6 @@ document.querySelectorAll(".lock-button, .hardware-color").forEach((button) => {
         roughness: parseFloat(event.target.getAttribute("roughness")) || 0,
         specular: parseFloat(event.target.getAttribute("specular")) || 0,
       };
-
       // Pass the customColor object to applyGeneralColor
       applyGeneralColor(customColor);
     } else {
@@ -1168,11 +757,11 @@ document.querySelectorAll(".lock-button, .hardware-color").forEach((button) => {
 function applyBrightBrassColor() {
   console.log("Applying Bright Brass Customization");
 
-  // Loop through the materials to find "HandleMaterial"
+  // Loop through the materials to find "lock"
   var materialToChange;
   for (var i = 0; i < myMaterials.length; i++) {
     var m = myMaterials[i];
-    if (m.name === "HandleMaterial") {
+    if (m.name === "lock.002") {
       materialToChange = m;
       console.log(`Material to Change has been found: ${m.name}`);
       break;
@@ -1207,7 +796,7 @@ function applyBrightBrassColor() {
       console.log("Bright Brass material updated successfully");
     });
   } else {
-    console.log("HandleMaterial not found");
+    console.log("lock not found");
   }
 }
 
@@ -1215,11 +804,11 @@ function applyBrightBrassColor() {
 function applyMorningSkyGrayColor() {
   console.log("Applying Morning Sky Gray Customization");
 
-  // Loop through the materials to find "HandleMaterial"
+  // Loop through the materials to find "lock"
   var materialToChange;
   for (var i = 0; i < myMaterials.length; i++) {
     var m = myMaterials[i];
-    if (m.name === "HandleMaterial") {
+    if (m.name === "lock.002") {
       materialToChange = m;
       console.log(`Material to Change has been found: ${m.name}`);
       break;
@@ -1257,7 +846,7 @@ function applyMorningSkyGrayColor() {
       console.log("Morning Sky Gray material updated successfully");
     });
   } else {
-    console.log("HandleMaterial not found");
+    console.log("lock not found");
   }
 }
 
@@ -1265,11 +854,11 @@ function applyMorningSkyGrayColor() {
 function applyOilRubbedBronzeColor() {
   console.log("Applying Oil Rubbed Bronze Customization");
 
-  // Loop through the materials to find "HandleMaterial"
+  // Loop through the materials to find "lock"
   var materialToChange;
   for (var i = 0; i < myMaterials.length; i++) {
     var m = myMaterials[i];
-    if (m.name === "HandleMaterial") {
+    if (m.name === "lock.002") {
       materialToChange = m;
       console.log(`Material to Change has been found: ${m.name}`);
       break;
@@ -1304,7 +893,7 @@ function applyOilRubbedBronzeColor() {
       console.log("Oil Rubbed Bronze material updated successfully");
     });
   } else {
-    console.log("HandleMaterial not found");
+    console.log("lock not found");
   }
 }
 
@@ -1314,7 +903,7 @@ function applyGeneralColor(customColor) {
   var materialToChange;
   for (var i = 0; i < myMaterials.length; i++) {
     var m = myMaterials[i];
-    if (m.name === "HandleMaterial") {
+    if (m.name === "lock.002") {
       materialToChange = m;
       console.log(`Material to Change has been found: ${m.name}`);
       break;
@@ -1343,7 +932,7 @@ function applyGeneralColor(customColor) {
       console.log(`${customColor.name} material updated successfully`);
     });
   } else {
-    console.log("HandleMaterial not found");
+    console.log("lock not found");
   }
 }
 function applySatinNickelColor() {
@@ -1352,7 +941,7 @@ function applySatinNickelColor() {
   var materialToChange;
   for (var i = 0; i < myMaterials.length; i++) {
     var m = myMaterials[i];
-    if (m.name === "HandleMaterial") {
+    if (m.name === "lock.002") {
       materialToChange = m;
       console.log(`Material to Change has been found: ${m.name}`);
       break;
@@ -1383,7 +972,7 @@ function applySatinNickelColor() {
       console.log("Satin Nickel material updated successfully");
     });
   } else {
-    console.log("HandleMaterial not found");
+    console.log("lock not found");
   }
 }
 
@@ -1394,7 +983,7 @@ function applyWhiteColor() {
   var materialToChange;
   for (var i = 0; i < myMaterials.length; i++) {
     var m = myMaterials[i];
-    if (m.name === "HandleMaterial") {
+    if (m.name === "lock.002") {
       materialToChange = m;
       console.log(`Material to Change has been found: ${m.name}`);
       break;
@@ -1419,7 +1008,7 @@ function applyWhiteColor() {
       console.log("White material updated successfully");
     });
   } else {
-    console.log("HandleMaterial not found");
+    console.log("lock not found");
   }
 }
 
@@ -1427,6 +1016,11 @@ document.querySelectorAll(".grille-option").forEach((option) => {
   option.addEventListener("click", (event) => {
     // Get the value of the data-pattern attribute
     const pattern = option.getAttribute("data-pattern");
+    const capitalizedColor = pattern.charAt(0).toUpperCase() + pattern.slice(1);
+
+    document.querySelectorAll(".grille-selected-color").forEach((element) => {
+      element.textContent = capitalizedColor;
+    });
     showGrillType(pattern);
 
     // Remove the 'selected' class from all options
@@ -1444,6 +1038,7 @@ document.querySelectorAll(".grille-option").forEach((option) => {
 
 document.querySelectorAll(".nav-item.center").forEach((element) => {
   element.addEventListener("click", (event) => {
+
     const selectedColor = "white";
     const extColor = "black";
     console.log(`Selected color : ${selectedColor}`);
@@ -1455,9 +1050,9 @@ document.querySelectorAll(".nav-item.center").forEach((element) => {
       button.classList.remove("selected");
     });
 
-    setColor("Interior", interiorColors[interiorColor]);
+    setColor("Interior.002", interiorColors[interiorColor]);
     updateExteriorColorOptions(selectedColor);
-    setColor("Exterior", interiorColors[extColor]);
+    setColor("Exterior.002", interiorColors[extColor]);
     document.querySelectorAll(".hardware-color").forEach((button) => {
       button.classList.remove("selected");
     });
@@ -1481,40 +1076,6 @@ document.querySelectorAll(".nav-item.center").forEach((element) => {
   });
 });
 
-// function focusExterior() {
-//   let exteriorCameraPos = [
-//     1.003572766898403, 3.5336761869366797, 1.9778968765932783,
-//   ];
-//   let exteriorCameraTarget = [
-//     0.9080488874564873, 0.058943422061014494, 1.0350473517155412,
-//   ];
-//   api.setCameraLookAt(
-//     exteriorCameraPos,
-//     exteriorCameraTarget,
-//     2,
-//     function (err) {
-//       if (err) console.error(err);
-//     }
-//   );
-// }
-
-// function focusInterior() {
-//   let interiorCameraPos = [
-//     0.9080488874565105, -3.366425992671914, 2.148017341436057,
-//   ];
-//   let interiorCameraTarget = [
-//     0.9080488874564873, 0.058943422061014494, 1.0350473517155412,
-//   ];
-//   api.setCameraLookAt(
-//     interiorCameraPos,
-//     interiorCameraTarget,
-//     2,
-//     function (err) {
-//       if (err) console.error(err);
-//     }
-//   );
-// }
-
 function deviceType() {
   const width = window.innerWidth;
 
@@ -1537,6 +1098,44 @@ function isNearPosition(currentPos, targetPos, threshold = 0.05) {
     Math.abs(currentPos[2] - targetPos[2]) < threshold
   );
 }
+// function focusExterior() {
+//   // Get the current device type (laptop or tablet)
+//   const device = deviceType(); // Returns either 'laptop' or 'tablet'
+
+//   // Get the camera settings for the current device
+//   const exterior = cameraSettings[device].exterior;
+//   const interior = cameraSettings[device].interior;
+//   const intermediate = cameraSettings[device].intermediate;
+
+//   // Adjust the camera position to be closer for a larger view
+//   const closerExteriorPosition = [
+//     exterior.position[0] * zoomOut, // Adjust X position
+//     exterior.position[1] * zoomOut, // Adjust Y position
+//     exterior.position[2] * zoomOut  // Adjust Z position
+//   ];
+
+//   // Get the current camera position and target
+//   api.getCameraLookAt(function (err, camera) {
+//     if (err) {
+//       console.error(err);
+//       return;
+//     }
+
+//     const currentPosition = camera.position;
+
+//     // Check if the current camera is near the interior position
+//     if (isNearPosition(currentPosition, interior.position)) {
+//       console.log(
+//         "Dest:Exterior Initial:Near Interior Path:Intermediate needed"
+//       );
+//       setCamera(intermediate.position, intermediate.target, 1);
+//       setTimeout(() => setCamera(closerExteriorPosition, exterior.target, 1), 700);
+//     } else {
+//       setCamera(closerExteriorPosition, exterior.target, 2);
+//     }
+//   });
+// }
+
 function focusExterior() {
   // Get the current device type (laptop or tablet)
   const device = deviceType(); // Returns either 'laptop' or 'tablet'
@@ -1567,6 +1166,7 @@ function focusExterior() {
     }
   });
 }
+
 function delayedExterior() {
   const exterior = cameraSettings[deviceType()].exterior;
   setCamera(exterior.position, exterior.target, 1);
@@ -1619,23 +1219,24 @@ function setCamera(position, target, duration = 2, callback) {
   });
 }
 
+
 // Hook up buttons to camera settings
-document.getElementById("interiorBtn").addEventListener("click", function () {
-  const interior = cameraSettings.laptop.interior;
-  setCamera(interior.position, interior.target);
-});
+// document.getElementById("interiorBtn").addEventListener("click", function () {
+//   const interior = cameraSettings.laptop.interior;
+//   setCamera(interior.position, interior.target);
+// });
 
-document.getElementById("exteriorBtn").addEventListener("click", function () {
-  const exterior = cameraSettings.laptop.exterior;
-  setCamera(exterior.position, exterior.target);
-});
+// document.getElementById("exteriorBtn").addEventListener("click", function () {
+//   const exterior = cameraSettings.laptop.exterior;
+//   setCamera(exterior.position, exterior.target);
+// });
 
-document
-  .getElementById("intermediateBtn")
-  .addEventListener("click", function () {
-    const intermediate = cameraSettings.laptop.intermediate;
-    setCamera(intermediate.position, intermediate.target);
-  });
+// document
+//   .getElementById("intermediateBtn")
+//   .addEventListener("click", function () {
+//     const intermediate = cameraSettings.laptop.intermediate;
+//     setCamera(intermediate.position, intermediate.target);
+//   });
 
 document.getElementById("setCamera").addEventListener("click", function () {
   // Retrieve input values
@@ -1661,17 +1262,17 @@ document.getElementById("setCamera").addEventListener("click", function () {
 });
 
 // Event Listener for "Get Position" Button
-document.getElementById("getPosition").addEventListener("click", function () {
-  // Call the API to get the current camera position and target
-  api.getCameraLookAt(function (err, camera) {
-    if (!err) {
-      console.log("Current Camera Position:", camera.position);
-      console.log("Current Camera Target:", camera.target);
-    } else {
-      console.error("Error getting camera position:", err);
-    }
-  });
-});
+// document.getElementById("getPosition").addEventListener("click", function () {
+//   // Call the API to get the current camera position and target
+//   api.getCameraLookAt(function (err, camera) {
+//     if (!err) {
+//       console.log("Current Camera Position:", camera.position);
+//       console.log("Current Camera Target:", camera.target);
+//     } else {
+//       console.error("Error getting camera position:", err);
+//     }
+//   });
+// });
 
 function createMaterialInput(name, options) {
   const container = document.createElement("div");

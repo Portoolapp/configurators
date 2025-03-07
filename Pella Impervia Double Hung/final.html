@@ -23,211 +23,126 @@
           allow="autoplay; fullscreen; xr-spatial-tracking"
           frameborder="0"
         ></iframe>
-        <div class="slider-container">
-          <p>Slide to Open</p>
-          <input
-            node="98"
-            type="range"
-            id="primarySlider"
-            class="slider"
-            min="-0.29"
-            max="0"
-            value="0"
-            step="0.005"
-          />
-          <input
-            node="98"
-            type="range"
-            id="secondarySlider"
-            class="slider"
-            min="0"
-            max="0.26"
-            value="0"
-            step="0.005"
-          />
-          <input
-            node="98"
-            type="range"
-            id="rotationSlider"
-            class="slider rotationslider"
-            min="0"
-            max="0.64"
-            value="0"
-            step="0.005"
-          />
+        <div class="toggle-container">
+            <button id="toggle-button" class="toggle-button" toggle-flag="0">
+                <span id="toggle-on" class="toggle-on"><b>TILT</b>To Clean</span>
+                <span id="toggle-off" class="toggle-off"><b>UN-TILT</span>
+            </button>
         </div>
       </div>
       <div class="configurator non-phone">
         <div class="centered-content">
-          <h3>Select Interior Color</h3>
+          <h1 class="modal-title">Pella Impervia Fiberglass Window</h1>
+          <div class="spacer"></div>
+          <h3>Select Interior Color: <span class="interior-selected-color"
+              style="color: #d4d4d4;font-weight: bold;">White</span></h3>
           <div class="color-options interior">
             <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="black"
-                style="background-color: #16151c"
-              >
+              <button class="interior-color tile" data-color="white" data-value="#f3f4f5"
+                style="background-color: #f3f4f5"></button>
+            </div>
+
+            <div class="color-option">
+              <button class="interior-color tile" data-color="black" data-value="#16151c"
+                style="background-color: #16151c">
                 <!-- <img src="colors/black.png" alt="" /> -->
               </button>
-              <span class="color-text">Black</span>
             </div>
 
             <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="bronze"
-                style="background-color: #4d4b47"
-              >
+              <button class="interior-color tile" data-color="brown" data-value="#4b453e"
+                style="background-color: #4b453e">
                 <!-- <img src="colors/Bronze.png" alt="" /> -->
               </button>
-              <span class="color-text">Bronze</span>
             </div>
 
             <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="white"
-                style="background-color: #f3f4f5"
-              ></button>
-              <span class="color-text">White</span>
-            </div>
-
-            <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="beige"
-                style="background-color: #816f51"
-              >
+              <button class="interior-color tile" data-color="tan" data-value="#c4b296"
+                style="background-color: #c4b296">
                 <!-- <img src="colors/Beige.png" alt="" /> -->
               </button>
-              <span class="color-text">Beige</span>
+            </div>
+            <div class="color-option">
+              <button class="interior-color tile" data-color="morningskygray" data-value="#c2bebb"
+                style="background-color: #c2bebb">
+                <!-- <img src="colors/Beige.png" alt="" /> -->
+              </button>
             </div>
           </div>
           <div class="spacer"></div>
-          <h3>Select Exterior Color</h3>
+          <h3>Select Exterior Color <span class="exterior-selected-color" style="color: #16151c;">Black</span></h3>
           <div class="color-options exterior">
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="black"
-                style="background-color: #16151c"
-              ></button>
-              <span class="color-text">Black</span>
+              <button class="exterior-color tile" data-color="white" data-value="#f3f4f5"
+                style="background-color: #f3f4f5"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="bronze"
-                style="background-color: #4d4b47"
-              ></button>
-              <span class="color-text">Bronze</span>
+              <button class="exterior-color tile" data-color="black" data-value="#16151c"
+                style="background-color: #16151c"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="white"
-                style="background-color: #f3f4f5"
-              ></button>
-              <span class="color-text">White</span>
+              <button class="exterior-color tile" data-color="brown" data-value="#4b453e"
+                style="background-color: #4b453e"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="beige"
-                style="background-color: #816f51"
-              ></button>
-              <span class="color-text">Beige</span>
+              <button class="exterior-color tile" data-color="tan" data-value="#c4b296"
+                style="background-color: #c4b296"></button>
+            </div>
+            <div class="color-option">
+              <button class="exterior-color tile" data-color="morningskygray" data-value="#c2bebb"
+                style="background-color: #c2bebb"></button>
             </div>
           </div>
-
           <div class="spacer"></div>
-          <h3>Select Hardware Colors</h3>
+          <h3>Select Hardware Color: <span class="hardware-selected-color" style="color: #d4d4d4;">White</span></h3>
           <div class="color-options hardware">
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="satin-nickel"
-                hex="#d2d2cd"
-                metalness="1"
-                glossiness="0.97"
-                roughness="0.03"
-                specular="0.9"
-                style="background-color: #74726d"
-              ></button>
-              <!-- <button
-                class="hardware-color tile"
-                data-color="satin-nickel"
-                hex="#74726d"
-                metalness="0.9"
-                glossiness="0.8"
-                roughness="0.1"
-                specular="0.7"
-                style="background-color: #74726d"
-              ></button> -->
-              <span class="color-text">Satin Nickel</span>
+              <button class="hardware-color tile" data-color="white" hex="#f0eeef" metalness="0.2" glossiness="0.5"
+                roughness="0.6" specular="0.4" style="background-color: #f0eeef"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="white"
-                hex="#f0eeef"
-                metalness="0.2"
-                glossiness="0.5"
-                roughness="0.6"
-                specular="0.4"
-                style="background-color: #f0eeef"
-              ></button>
-              <span class="color-text">White</span>
+              <button class="hardware-color tile" data-color="satin-nickel" hex="#74726d" metalness="1"
+                glossiness="0.97" roughness="0.03" specular="0.9" style="background-color: #74726d"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="matte-black"
-                hex="#212121"
-                metalness="0.0"
-                glossiness="0.1"
-                roughness="0.9"
-                specular="0.05"
-                style="background-color: #212121"
-              ></button>
-              <span class="color-text">Matte Black</span>
+              <button class="hardware-color tile" data-color="morning-sky-gray" hex="#c2bebb" metalness="0.3"
+                glossiness="0.4" roughness="0.5" specular="0.6" style="background-color: #c2bebb"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="tan"
-                hex="#beae94"
-                metalness="0.1"
-                glossiness="0.6"
-                roughness="0.3"
-                specular="0.5"
-                style="background-color: #beae94"
-              ></button>
-              <span class="color-text">Tan</span>
+              <button class="hardware-color tile" data-color="oil-rubbed-bronze" hex="#423f35" metalness="0.0"
+                glossiness="0.1" roughness="0.9" specular="0.05" style="background-color: #423f35"></button>
             </div>
 
-            <!-- <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="morning-sky-gray"
-                hex="#a2a0a0"
-                metalness="0.3"
-                glossiness="0.4"
-                roughness="0.5"
-                specular="0.6"
-                style="background-color: #bebebb"
-              ></button>
-              <span class="color-text">Morning Sky Gray</span>
-            </div> -->
+            <div class="color-option">
+              <button class="hardware-color tile" data-color="bright-brass" hex="#c6af5f" metalness="0.1"
+                glossiness="0.6" roughness="0.3" specular="0.5" style="background-color: #c6af5f"></button>
+            </div>
+
+
           </div>
           <div class="spacer"></div>
+          <h3 class="grillheading">Select Grille Pattern: <span class="grille-selected-color" style="color: #16151c;">
+              Traditional</span></h3>
+          <div class="grille-pattern-menu">
+            <div class="grille-options">
+              <div class="grille-option" data-pattern="no-grilles">
+                <img src="colors/No Grilles.png" alt="No Grilles" />
+              </div>
+              <div class="grille-option" data-pattern="traditional">
+                <img src="colors/Traditional Grilles.png" alt="Traditional" />
+              </div>
 
+              <div class="grille-option" data-pattern="prairie">
+                <img src="colors/Prairie Grilles.png" alt="Prairie" />
+              </div>
+            </div>
+          </div>
           <div class="debug">
             <!-- Button to get the current camera position and target -->
             <button id="getCamera">Get Camera Position & Target</button>
@@ -265,59 +180,50 @@
         </div>
       </div>
       <div class="configuratormobile phone-only">
+
         <!-- Page 1: Interior Color -->
         <div class="page1">
           <div class="heading">
-            <h3>Interior Color</h3>
+            <h3>Interior Color: <span class="interior-selected-color" style="color: #d4d4d4;">White</span></h3>
           </div>
-          <div class="color-options interior scrollable-options">
+          <div class="color-options interior scrollable-options" style="padding: 3px;">
             <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="black"
-                style="background-color: #16151c"
-              >
+              <button class="interior-color tile" data-color="white" data-value="#f3f4f5"
+                style="background-color: #f3f4f5"></button>
+            </div>
+
+            <div class="color-option">
+              <button class="interior-color tile" data-color="black" data-value="#16151c"
+                style="background-color: #16151c">
                 <!-- <img src="colors/black.png" alt="" /> -->
               </button>
-              <span class="color-text">Black</span>
             </div>
 
             <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="bronze"
-                style="background-color: #4d4b47"
-              >
+              <button class="interior-color tile" data-color="brown" data-value="#4b453e"
+                style="background-color: #4b453e">
                 <!-- <img src="colors/Bronze.png" alt="" /> -->
               </button>
-              <span class="color-text">Bronze</span>
             </div>
-
             <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="white"
-                style="background-color: #f3f4f5"
-              ></button>
-              <span class="color-text">White</span>
-            </div>
-
-            <div class="color-option">
-              <button
-                class="interior-color tile"
-                data-color="beige"
-                style="background-color: #816f51"
-              >
+              <button class="interior-color tile" data-color="tan" data-value="#beae94"
+                style="background-color: #beae94">
                 <!-- <img src="colors/Beige.png" alt="" /> -->
               </button>
-              <span class="color-text">Beige</span>
+            </div>
+
+            <div class="color-option">
+              <button class="interior-color tile" data-color="morningskygray" data-value="#c2bebb"
+                style="background-color: #c2bebb">
+                <!-- <img src="colors/Beige.png" alt="" /> -->
+              </button>
             </div>
           </div>
           <div class="navigation">
             <div class="nav-item left">
               <div class="arrow">&lt;</div>
 
-              <div class="text">Hardware Color</div>
+              <div class="text">Grill Patterns</div>
             </div>
             <div class="nav-item center">
               <div class="cross">×</div>
@@ -334,43 +240,39 @@
         <!-- Page 2: Exterior Color -->
         <div class="page2">
           <div class="heading">
-            <h3>Exterior Color</h3>
+            <h3>Exterior Color: <span class="exterior-selected-color" style="color: #16151c ;">Black</span></h3>
           </div>
-          <div class="color-options exterior scrollable-options">
+          <div class="color-options exterior scrollable-options" style="padding: 3px; ">
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="black"
-                style="background-color: #16151c"
-              ></button>
-              <span class="color-text">Black</span>
+              <button class="exterior-color tile" data-color="white" data-value="#f3f4f5"
+                style="background-color: #f3f4f5"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="bronze"
-                style="background-color: #4d4b47"
-              ></button>
-              <span class="color-text">Bronze</span>
+              <button class="exterior-color tile" data-color="black" data-value="#16151c"
+                style="background-color: #16151c">
+                <!-- <img src="colors/black.png" alt="" /> -->
+              </button>
             </div>
 
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="white"
-                style="background-color: #f3f4f5"
-              ></button>
-              <span class="color-text">White</span>
+              <button class="exterior-color tile" data-color="brown" data-value="#4b453e"
+                style="background-color: #4b453e">
+                <!-- <img src="colors/Bronze.png" alt="" /> -->
+              </button>
+            </div>
+            <div class="color-option">
+              <button class="exterior-color tile" data-color="tan" data-value="#beae94"
+                style="background-color: #beae94">
+                <!-- <img src="colors/Beige.png" alt="" /> -->
+              </button>
             </div>
 
             <div class="color-option">
-              <button
-                class="exterior-color tile"
-                data-color="beige"
-                style="background-color: #816f51"
-              ></button>
-              <span class="color-text">Beige</span>
+              <button class="exterior-color tile" data-color="morningskygray" data-value="#c2bebb"
+                style="background-color: #c2bebb">
+                <!-- <img src="colors/Beige.png" alt="" /> -->
+              </button>
             </div>
           </div>
           <div class="navigation">
@@ -394,78 +296,34 @@
         <!-- Page 3: Hardware Color -->
         <div class="page3">
           <div class="heading">
-            <h3>Hardware Color</h3>
+            <h3>Hardware Color: <span class="hardware-selected-color" style="color: #d4d4d4 ;">White</span></h3>
           </div>
-          <div class="color-options hardware scrollable-options">
+          <div class="color-options hardware scrollable-options" style="padding: 3px;">
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="satin-nickel"
-                hex="#74726d"
-                metalness="0.9"
-                glossiness="0.8"
-                roughness="0.1"
-                specular="0.7"
-                style="background-color: #74726d"
-              ></button>
-              <span class="color-text">Satin Nickel</span>
+              <button class="hardware-color tile" data-color="white" hex="#f0eeef" metalness="0.2" glossiness="0.5"
+                roughness="0.6" specular="0.4" style="background-color: #f0eeef"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="white"
-                hex="#f0eeef"
-                metalness="0.2"
-                glossiness="0.5"
-                roughness="0.6"
-                specular="0.4"
-                style="background-color: #f0eeef"
-              ></button>
-              <span class="color-text">White</span>
+              <button class="hardware-color tile" data-color="satin-nickel" hex="#74726d" metalness="0.9"
+                glossiness="0.8" roughness="0.1" specular="0.7" style="background-color: #74726d"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="matte-black"
-                hex="#212121"
-                metalness="0.0"
-                glossiness="0.1"
-                roughness="0.9"
-                specular="0.05"
-                style="background-color: #212121"
-              ></button>
-              <span class="color-text">Matte Black</span>
+              <button class="hardware-color tile" data-color="morning-sky-gray" hex="#bebebb" metalness="0.3"
+                glossiness="0.4" roughness="0.5" specular="0.6" style="background-color: #bebebb"></button>
             </div>
 
             <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="tan"
-                hex="#beae94"
-                metalness="0.1"
-                glossiness="0.6"
-                roughness="0.3"
-                specular="0.5"
-                style="background-color: #beae94"
-              ></button>
-              <span class="color-text">Tan</span>
+              <button class="hardware-color tile" data-color="oil-rubbed-bronze" hex="#212121" metalness="0.0"
+                glossiness="0.1" roughness="0.9" specular="0.05" style="background-color: #212121"></button>
             </div>
 
-            <!-- <div class="color-option">
-              <button
-                class="hardware-color tile"
-                data-color="morning-sky-gray"
-                hex="#bebebb"
-                metalness="0.3"
-                glossiness="0.4"
-                roughness="0.5"
-                specular="0.6"
-                style="background-color: #bebebb"
-              ></button>
-              <span class="color-text">Morning Sky Gray</span>
-            </div> -->
+            <div class="color-option">
+              <button class="hardware-color tile" data-color="bright-brass" hex="#c6af5f" metalness="0.1"
+                glossiness="0.6" roughness="0.3" specular="0.5" style="background-color: #c6af5f"></button>
+            </div>
+
           </div>
           <div class="navigation">
             <div class="nav-item left">
@@ -480,7 +338,47 @@
             <div class="nav-item right">
               <div class="arrow">&gt;</div>
               <!-- Greater than symbol -->
-              <div class="text">Interior Color</div>
+              <div class="text">Grille Pattern</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page 4: Grille Pattern -->
+        <div class="page4">
+          <div class="heading">
+            <h3>Grille Pattern: <span class="grille-selected-color" style="color: #16151c ;">Traditional</span></h3>
+          </div>
+          <div class="grille-options scrollable-options-grill">
+            <div class="grille-option" data-pattern="no-grilles">
+              <img src="colors/No Grilles.png" alt="No Grilles" />
+
+            </div>
+            <div class="grille-option" data-pattern="traditional">
+              <img src="colors/Traditional Grilles.png" alt="Traditional" />
+
+            </div>
+            <div class="grille-option" data-pattern="prairie">
+              <img src="colors/Prairie Grilles.png" alt="Prairie" />
+
+            </div>
+          </div>
+          <div class="navigation">
+            <div class="nav-item left">
+              <div class="arrow">&lt;</div>
+              <!-- Less than symbol -->
+              <div class="text">Hardware Color</div>
+            </div>
+            <div class="nav-item center">
+              <div class="cross">×</div>
+              <div class="text">Reset</div>
+            </div>
+            <div class="nav-item right">
+              <div class="arrow">&gt;</div>
+              <!-- Greater than symbol -->
+              <div class="text">
+                <div class="text">Interior Color</div>
+              </div>
+              <!-- No next page in this case -->
             </div>
           </div>
         </div>
